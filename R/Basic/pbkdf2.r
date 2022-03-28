@@ -107,8 +107,9 @@ uintToRaw <- function(num, minLen=4) {
 #   index       : the block index to append to the salt in the first prf call
 ###########################################################################
 f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
-    if (!(is.numeric(index) && 0 <= index && index <= ((2^32)-1)))
-        stop ("Derived key too long")
+    if (!is.numeric(index)) stop("The index must be a number.")
+    if (!(0 <= index && index <= ((2^32)-1)))
+        stop ("Derived key too long.")
     U <- prf(passphrase, c(salt, uintToRaw(index)))
     result <- U
     if (iterations > 1) {
