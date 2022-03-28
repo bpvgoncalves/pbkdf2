@@ -3,15 +3,24 @@
 #
 # IETF RFC 8018 January 2017
 #   This implementation uses a pseudorandom function (PRF) based
-#   on an HMAC (e.g., NIST-198) and a hash function (e.g., SHA-1,
-#   SHA-2, NIST-180); by default, HMAC-SHA-256.
+#   on an HMAC (e.g., FIPS-NIST-198) and a hash function (e.g., SHA-1,
+#   SHA-2, FIPS-NIST-180); by default, HMAC-SHA-256.
 #
+# PBKDF2 takes a passphrase and a salt and returns a requested
+# number, dkLen, of key bytes.  It generates the key bytes by repeatedly
+# calling an internal function, f, until it has concatenated together
+# enough blocks to return the requested number of key bytes. 
+# The function f recursively calls a pseudorandom function a requested
+# number of iterations to produce a block of bytes to add to the key.
+# The pseudorandom function is usually (and by default) an HMAC based on a
+# hash function, such as specified in FIPS-NIST-198.
+# The PBKDF2 algorithm is described in detail in ITEF RCF 8018. 
+# 
 # This implementation is inspired by the 2007-2011 Python program
 # by Dwayne C. Litzenberger <dlitz@dlitz.net>.  However, it does not
 # use the file-like model, but instead implements the straightforward
 # model from RCF 8018 in which a single call to PBKDF2 generates and
-# returns all of the requested dkLen key bytes. Any shortcomings
-# are entirely my own.
+# returns all of the requested dkLen key bytes.
 #
 # Copyright (C) 2022 Sigfredo I. Nin (signin@email.com)
 #
@@ -86,17 +95,20 @@ uintToRaw <- function(num, minLen=4) {
 ###########################################################################
 # The internal function f in the PBKDF2 algorithm.  Returns a block of hlen
 # key bytes, where hlen is the block size of the underlying pseudorandom
-# function, prf().
+# function, prf().  The pseudorandom function takes a passphrase, a
+# variable-length raw vector; and a salt, also a variable-length raw vector;
+# it returns a (typically fixed length) raw vector.
 #
 # Inputs:
 #   passphrase  : String to be expanded into a key.
 #   salt        : Raw bytes to expand the set of possible keys.
 #   iterations  : Number of times to apply the pseudorandom function
-#   prf:        : Pseudorandom function
+#   prf:        : Pseudorandom function ()
 #   index       : the block index to append to the salt in the first prf call
 ###########################################################################
 f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
-    stopifnot(0 <= index && index <= ((2^32)-1))
+    if (!(is.numeric(index) && 0 <= index && index <= ((2^32)-1)))
+        stop ("Derived key too long")
     U <- prf(passphrase, c(salt, uintToRaw(index)))
     result <- U
     if (iterations > 1) {
@@ -129,10 +141,12 @@ PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000,
                       prf=HMAC_SHA_256) {
     passphrase <- makeStringRaw(passphrase)
     salt <- makeStringRaw(salt)
-    if (!is.numeric(iterations)) stop("Iterations count must be a number.")
-    if (iterations < 1) stop("Iterations count must be at least 1.")
-    if (iterations > 2^32-1) stop("Iterations count cannot exceed 2^32-1 (0xFFFFFFFF).")
-    if (!is.function(prf)) stop("Pseudorandom function prf is not a function.")
+    if (!is.numeric(dkLen)) stop("The dkLen must be a number.")
+    if (dkLen < 1) stop("The dkLen must be at least 1.")
+    if (!is.numeric(iterations)) stop("The iterations count must be a number.")
+    if (iterations < 1) stop("The iterations count must be at least 1.")
+    if (iterations > 2^32-1) stop("The iterations count cannot exceed 2^32-1 (0xFFFFFFFF).")
+    if (!is.function(prf)) stop("The pseudorandom function prf must be a callable function.")
     bytes <- raw()
     index <- 1
     while (length(bytes) < dkLen) {
