@@ -1,5 +1,14 @@
 # pbkdf2
-Implementations of PBKDF2 defined in IETF RCF 8018
+
+Implementations of the PBKDF2 function defined in IETF RCF 8018.
+
+PBKDF2 takes a passphrase and a salt and returns a requested number, dkLen, of key bytes.  It generates the key bytes by repeatedly calling an internal function, f, until it has concatenated together enough blocks to return the requested number of key bytes. The function f recursively calls a pseudorandom function a requested number of iterations to produce a block of bytes to add to the key. The pseudorandom function is usually (and by default) an HMAC based on a hash function, such as specified in FIPS-NIST-198.
+
+The PBKDF2 algorithm is described in detail in ITEF RCF 8018.
+
+## R/Basic
+
+This is the R programming 101 version.  A call to the PBKDF2 function computes and returns the requested number of key bytes.  This is an advantage if only a small number of key bytes are required, as in the usual case of generating one key to encrypt some data.  It may be a disadvantage if a large number of key bytes are needed, as when a set of keys are to be generated from the same password.
 
 ## License (MIT License)
 
