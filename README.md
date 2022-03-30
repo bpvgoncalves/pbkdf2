@@ -17,7 +17,7 @@ IETF RFC 8018
     January 2017  
     Definition of function PBKDF2
 
-IETF-RFC-7914  
+IETF RFC 7914  
     The scrypt Password-Based Key Derivation Function  
     August 2016  
     Includes test vectors for PBKDF2 with HMAC-SHA-256.
