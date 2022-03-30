@@ -45,7 +45,7 @@ PBKDF2 Test Vectors
      https://stackoverflow.com/questions/5130513/pbkdf2-hmac-sha2-test-vectors
 
 PBKDF2 HMAC-SHA-2 Test Vectors  
-    https://github.com/brycx/Test-Vector-Generation/blob/PBKDF2/pbkdf2-hmac-sha2-test-vectors.md  
+    https://github.com/brycx/Test-Vector-Generation/blob/master/PBKDF2/pbkdf2-hmac-sha2-test-vectors.md  
     January 2019
 
 FIPS-NIST-180-4  
