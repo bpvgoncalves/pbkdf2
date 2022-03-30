@@ -10,11 +10,11 @@ The PBKDF2 algorithm is described in detail in ITEF RCF 8018.
 
 This is the R programming 101 version.  A call to the PBKDF2 function computes and returns the requested number of key bytes.  This is an advantage if only a small number of key bytes are required, as in the usual case of generating one key to encrypt some data.  It may be a disadvantage if a large number of key bytes are needed, as when a set of keys are to be generated from the same password.
 
-# References
+## References
 
 IETF RFC 8018  
-    PKCS #5: Password-Based Cryptography Specification  
-    Version 2.1, January 2017  
+    PKCS #5: Password-Based Cryptography Specification Version 2.1  
+    January 2017  
     Definition of function PBKDF2
 
 IETF-RFC-7914  
@@ -23,8 +23,8 @@ IETF-RFC-7914
     Includes test vectors for PBKDF2 with HMAC-SHA-256.
 
 IETF RFC 6070  
-    PKCS #5: Password-Based Key Derivation Function (PBKDF2)  
-    Test Vectors, January 2011  
+    PKCS #5: Password-Based Key Derivation Function (PBKDF2) Test Vectors  
+    January 2011  
     PBKDF2-HMAC-SHA1 test vectors
 
 IETF RFC 4231  
