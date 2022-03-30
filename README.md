@@ -10,6 +10,56 @@ The PBKDF2 algorithm is described in detail in ITEF RCF 8018.
 
 This is the R programming 101 version.  A call to the PBKDF2 function computes and returns the requested number of key bytes.  This is an advantage if only a small number of key bytes are required, as in the usual case of generating one key to encrypt some data.  It may be a disadvantage if a large number of key bytes are needed, as when a set of keys are to be generated from the same password.
 
+# References
+
+IETF RFC 8018
+    PKCS #5: Password-Based Cryptography Specification
+    Version 2.1, January 2017
+    Definition of function PBKDF2
+
+IETF-RFC-7914
+    The scrypt Password-Based Key Derivation Function
+    August 2016
+    Includes test vectors for PBKDF2 with HMAC-SHA-256.
+
+IETF RFC 6070
+    PKCS #5: Password-Based Key Derivation Function (PBKDF2)
+    Test Vectors, January 2011
+    PBKDF2-HMAC-SHA1 test vectors
+
+IETF RFC 4231
+    Identifiers and Test Vectors for HMAC-SHA-224, HMAC-SHA-256, HMAC-SHA-384, and HMAC-SHA-512
+    December 2005
+    Test vectors for SHA2 HMAC variants that can be used as the pseudorandom function in PBKDF2.
+
+IETF RFC 2104
+    HMAC: Keyed-Hashing for Message Authentication
+    February 1997
+    Specifies HMAC using a generic cryptographic function.
+
+PBKDF2 Test Vectors
+     https://github.com/Anti-weakpasswords/PBKDF2-Test-Vectors/releases
+     March 2014
+     Test vectors for PBKDF2 with HMAC -MD-5, SHA-1, -SHA-224, SHA-256, SHA-384, SHA-512
+     validated on over a half dozen PBKDF2 implementations (seethe author's post at
+     https://stackoverflow.com/questions/5130513/pbkdf2-hmac-sha2-test-vectors
+
+PBKDF2 HMAC-SHA-2 Test Vectors
+    https://github.com/brycx/Test-Vector-Generation/blob/PBKDF2/pbkdf2-hmac-sha2-test-vectors.md
+    January 2019
+
+FIPS-NIST-180-4
+    Secure Hash Standard, 
+    http://dx.doi.org/10.6028/NIST.FIPS.180-4
+    August 2015
+    Specifies SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224 and SHA-512/256.
+
+FIPS-NIST-198
+    The Keyed-Hash Message Authentication Code (HMAC)
+    July 2008
+    Describes a keyed-hash message authentication code (HMAC), that can be used with any
+    iterative Approved cryptographic hash function, in combination with a shared secret key.
+
 ## License (MIT License)
 
 Copyright © 2022 Sigfredo Ismael Nin Colón (signin@email.com)
