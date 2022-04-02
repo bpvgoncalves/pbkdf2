@@ -11,9 +11,9 @@
 # calling an internal function, f, until it has concatenated together
 # enough blocks to return the requested number of key bytes. 
 # The function f recursively calls a pseudorandom function a requested
-# number of iterations to produce a block of bytes to add to the key.
+# number of iterations to produce a block of bytes to add to the key. 
 # The pseudorandom function is usually (and by default) an HMAC based on a
-# hash function, such as specified in FIPS-NIST-198.
+# hash function, such as specified in FIPS-NIST-198. 
 # The PBKDF2 algorithm is described in detail in ITEF RCF 8018. 
 # 
 # This implementation is inspired by the 2007-2011 Python program
@@ -22,7 +22,7 @@
 # model from RCF 8018 in which a single call to PBKDF2 generates and
 # returns all of the requested dkLen key bytes.
 #
-# Copyright (C) 2022 Sigfredo I. Nin (signin@email.com)
+# Copyright (C) 2022 Sigfredo Ismael Nin Colón (signin@email.com)
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
