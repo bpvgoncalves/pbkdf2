@@ -2,6 +2,7 @@ source("../PBKDF2/R/Basic/pbkdf2.r", CHDIR=TRUE)
 library(testthat)
 library(wkb)
 
+# PBKDF2-HMAC-SHA-256 ---------------------------------------------------------------------
 # Test various iteration counts, dkLen=hlen-HMAC-SHA-256=32
 test_that("iterations", {
     expect_equal(
@@ -53,10 +54,12 @@ test_that("pw salt dkLen", {
     )
 })
 
-# SHA-1 IETF RCF 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
+# PBKDF2-HMAC-SHA-1 -----------------------------------------------------------------------
 HMAC_SHA_1 <- function(key, object) {
     hmac(key, object, algo="sha1", raw=TRUE)
 }
+
+# SHA-1 IETF RCF 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
 test_that("iterations", {
     expect_equal(
         PBKDF2("password", "salt", 20, prf=HMAC_SHA_1, iterations=1),
