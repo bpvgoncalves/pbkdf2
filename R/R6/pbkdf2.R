@@ -17,7 +17,7 @@
 # The PBKDF2 algorithm is described in detail in ITEF RCF 8018. 
 # 
 # This implementation is inspired by the 2007-2011 Python program
-# by Dwayne C. Litzenberger <dlitz@dlitz.net>.  It implementes a
+# by Dwayne C. Litzenberger <dlitz@dlitz.net>.  It implements a
 # file-like model in which a caller can request key bytes generated
 # from a given password and salt in successive calls, as if reading
 # from a stream.
@@ -74,7 +74,7 @@ PBKDF2_READER <- R6Class("PBKDF2_READER",
 
         # private methods
 
-       ###########################################################################
+        ###########################################################################
         # Convert a UTF-8 string to raw bytes.
         #
         # Inputs:
@@ -179,8 +179,8 @@ PBKDF2_READER <- R6Class("PBKDF2_READER",
             # initialize parameters
             private$passphrase <- makeStringRaw(passphrase)
             private$salt <- makeStringRaw(salt)
-            private$iterations = iterations
-            private$prf = prf
+            private$iterations <- iterations
+            private$prf <- prf
 
             # initialize state
             private$index <- 1          # First block will be index 1
