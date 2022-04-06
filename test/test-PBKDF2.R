@@ -59,7 +59,7 @@ HMAC_SHA_1 <- function(key, object) {
     hmac(key, object, algo="sha1", raw=TRUE)
 }
 
-# SHA-1 IETF RCF 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
+# SHA-1 IETF RFC 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
 test_that("iterations", {
     expect_equal(
         PBKDF2("password", "salt", 20, prf=HMAC_SHA_1, iterations=1),
@@ -75,7 +75,7 @@ test_that("iterations", {
     )
 })
 
-# SHA-1 IETF RCF 6070 test vectors: longer password and salt, and with special characters; also dkLen != hlen
+# SHA-1 IETF RFC 6070 test vectors: longer password and salt, and with special characters; also dkLen != hlen
 test_that("pw salt dkLen", {
     expect_equal(
         PBKDF2("passwordPASSWORDpassword", "saltSALTsaltSALTsaltSALTsaltSALTsalt", 25,

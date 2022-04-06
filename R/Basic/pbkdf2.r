@@ -14,12 +14,12 @@
 # number of iterations to produce a block of bytes to add to the key. 
 # The pseudorandom function is usually (and by default) an HMAC based on a
 # hash function, such as specified in FIPS-NIST-198. 
-# The PBKDF2 algorithm is described in detail in IETF RCF 8018. 
+# The PBKDF2 algorithm is described in detail in IETF RFC 8018. 
 # 
 # This implementation is inspired by the 2007-2011 Python program
 # by Dwayne C. Litzenberger <dlitz@dlitz.net>.  However, it does not
 # use the file-like model, but instead implements the straightforward
-# model from RCF 8018 in which a single call to PBKDF2 generates and
+# model from RFC 8018 in which a single call to PBKDF2 generates and
 # returns all of the requested dkLen key bytes.
 #
 # Copyright (C) 2022 Sigfredo Ismael Nin Colón (signin@email.com)
