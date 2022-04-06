@@ -210,9 +210,9 @@ PBKDF2_READER <- R6Class("PBKDF2_READER",
             if (!(dkLen <= length(private$bytes)))
                 stop("ERROR: stopped generating but bytes generated < dklen.")
             result <- private$bytes[1:dkLen]        # Requested key bytes
-            bytesLeft = length(private$bytes) - dkLen
+            bytesLeft <- length(private$bytes) - dkLen
             if (bytesLeft > 0)
-                private$bytes <- private$bytes[dkLen+1:length(private$bytes)]  # Leave remaining bytes
+                private$bytes <- private$bytes[(dkLen+1):length(private$bytes)]  # Leave remaining bytes
             else
                 private$bytes <- raw()
             return(result)
