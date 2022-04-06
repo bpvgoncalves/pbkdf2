@@ -28,8 +28,8 @@ test_that("pw salt dkLen", {
             "c635518c 7dac47e9"
         ))
     )
-    pass0word = c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
-    sa0lt = c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
+    pass0word  <- c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
+    sa0lt  <- c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
     expect_equal(
         PBKDF2(pass0word, sa0lt, 16, iterations=4096),
         hex2raw("89b69d05 16f82989 3c696226 650a8687")
@@ -84,8 +84,8 @@ test_that("pw salt dkLen", {
             "3d2eec4f e41c849b 80c8d836 62c0e44a  8b291a96 4cf2f070 38"
         ))
     )
-    pass0word = c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
-    sa0lt = c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
+    pass0word  <- c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
+    sa0lt  <- c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
     expect_equal(
         PBKDF2(pass0word, sa0lt, 16, prf=HMAC_SHA_1, iterations=4096),
         hex2raw("56fa6aa7 5548099d cc37d7f0 3425e0c3")

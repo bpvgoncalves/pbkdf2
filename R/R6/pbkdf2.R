@@ -81,7 +81,7 @@ PBKDF2_READER <- R6Class("PBKDF2_READER",
         #   obj     : the UTF-8 string to be converted
         ###########################################################################
         makeStringRaw = function(obj) {
-            result = obj;
+            result <- obj;
             if (!is.raw(obj)) {
                 if (is.character(obj)) {
                     if (!validUTF8(obj)) stop("Input to makeStringRaw() must be a valid UTF-8 string or raw bytes.")
