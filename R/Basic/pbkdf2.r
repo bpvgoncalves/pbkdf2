@@ -14,7 +14,7 @@
 # number of iterations to produce a block of bytes to add to the key. 
 # The pseudorandom function is usually (and by default) an HMAC based on a
 # hash function, such as specified in FIPS-NIST-198. 
-# The PBKDF2 algorithm is described in detail in ITEF RCF 8018. 
+# The PBKDF2 algorithm is described in detail in IETF RCF 8018. 
 # 
 # This implementation is inspired by the 2007-2011 Python program
 # by Dwayne C. Litzenberger <dlitz@dlitz.net>.  However, it does not
