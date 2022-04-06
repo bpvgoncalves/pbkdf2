@@ -8,6 +8,10 @@ The PBKDF2 algorithm is described in detail in ITEF RCF 8018.
 
 This is the R programming 101 version.  A call to the PBKDF2 function computes and returns the requested number of key bytes.  This is an advantage if only a small number of key bytes are required, as in the usual case of generating one key to encrypt some data.  It may be a disadvantage if a large number of key bytes are needed, as when a set of keys are to be generated from the same password.
 
+## R/R6
+
+This the R6 OOP version. The PBDKF2_READER class is instantiated with the password, salt, number of iterations, and HMAC function to be used in the algorithm.  The read(count) method generates enough blocks to return the requested number of expanded key bytes.  If the count is not a multiple of the underlying block size (the hash length), then read(count) saves the leftover bytes.  Additional calls to read(count) return subsequent bytes from the sequence defined by the parameters, beginning with any leftover bytes, as if reading from a stream.  The close() method makes the remainder of the expanded key bytes inaccesible, so further calls to read(count) will throw an error.
+
 ## References
 
 IETF RFC 8018  
