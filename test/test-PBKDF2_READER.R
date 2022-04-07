@@ -32,7 +32,9 @@ test_that("PBKDF2_READER can handle basic operations", {
 # Test varying length password and salt, and with special characters; also dkLen != hlen
 test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
 
-    reader <- PBKDF2_READER$new("passwordPASSWORDpassword", "saltSALTsaltSALTsaltSALTsaltSALTsalt", iterations=4096)
+    reader <- PBKDF2_READER$new("passwordPASSWORDpassword",
+                                "saltSALTsaltSALTsaltSALTsaltSALTsalt",
+                                iterations=4096)
     expect_is(reader, "PBKDF2_READER")
     expect_equal(
         reader$read(40),
@@ -73,5 +75,49 @@ test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
             "62aae85a 11cdde82 9d89cb6f fd1ab0e6  3a981f87 47d2f2f9 fe587416 5c83c168",
             "d2eed1d2 d5ca4052 dec2be57 15623da0  19b8c0ec 87dc36aa 751c38f9 893d15c3"
         ))
+    )
+})
+
+# SHA-1 IETF RFC 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
+test_that("PBKDF2_READER can handle basic operations", {
+    reader <- PBKDF2_READER("password", "salt", prf=HMAC_SHA_1, iterations=1)
+    expect_is(reader, "PBKDF2_READER")
+    expect_equal(
+        reader$read(20),
+        hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6")
+    )
+    reader <- PBKDF2_READER("password", "salt", prf=HMAC_SHA_1, iterations=2)
+    expect_is(reader, "PBKDF2_READER")
+    expect_equal(
+        reader$read(20),
+        hex2raw("ea6c014d c72d6f8c cd1ed92a ce1d41f0  d8de8957")
+    )
+    reader <- PBKDF2_READER("password", "salt", prf=HMAC_SHA_1, iterations=4096)
+    expect_is(reader, "PBKDF2_READER")
+    expect_equal(
+        reader$read(20),
+        hex2raw("4b007901 b765489a bead49d9 26f721d0  65a429c1")
+    )
+})
+
+# SHA-1 IETF RFC 6070 test vectors: longer password and salt, and with special characters; also dkLen != hlen
+test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
+    reader <- PBKDF2_READER("passwordPASSWORDpassword",
+                     "saltSALTsaltSALTsaltSALTsaltSALTsalt",
+                     prf=HMAC_SHA_1, iterations=4096)
+    expect_is(reader, "PBKDF2_READER")
+    expect_equal(
+        reader$read(25),
+        hex2raw(paste(
+            "3d2eec4f e41c849b 80c8d836 62c0e44a  8b291a96 4cf2f070 38"
+        ))
+    )
+    pass0word  <- c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
+    sa0lt  <- c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
+    reader <- PBKDF2_READER(pass0word, sa0lt, prf=HMAC_SHA_1, iterations=4096)
+    expect_is(reader, "PBKDF2_READER")
+    expect_equal(
+        reader$read(16),
+        hex2raw("56fa6aa7 5548099d cc37d7f0 3425e0c3")
     )
 })
