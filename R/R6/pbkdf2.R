@@ -126,7 +126,7 @@ PBKDF2_READER <- R6Class("PBKDF2_READER",
         f = function() {
             if (!(0 <= private$index && private$index <= ((2^32)-1)))
                 stop ("Derived key too long.")
-            U <- prf(private$passphrase, c(private$salt, uintToRaw(private$index)))
+            U <- private$prf(private$passphrase, c(private$salt, private$uintToRaw(private$index)))
             result <- U
             if (private$iterations > 1) {
                 for (j in 2:private$iterations) {
@@ -177,8 +177,8 @@ PBKDF2_READER <- R6Class("PBKDF2_READER",
             if (!is.function(prf)) stop("The pseudorandom function prf must be a callable function.")
 
             # initialize parameters
-            private$passphrase <- makeStringRaw(passphrase)
-            private$salt <- makeStringRaw(salt)
+            private$passphrase <- private$makeStringRaw(passphrase)
+            private$salt <- private$makeStringRaw(salt)
             private$iterations <- iterations
             private$prf <- prf
 
