@@ -78,21 +78,26 @@ test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
     )
 })
 
+# PBKDF2-HMAC-SHA-1 -----------------------------------------------------------------------
+HMAC_SHA_1 <- function(key, object) {
+    hmac(key, object, algo="sha1", raw=TRUE)
+}
+
 # SHA-1 IETF RFC 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
 test_that("PBKDF2_READER can handle basic operations", {
-    reader <- PBKDF2_READER("password", "salt", prf=HMAC_SHA_1, iterations=1)
+    reader <- PBKDF2_READER$new("password", "salt", prf=HMAC_SHA_1, iterations=1)
     expect_is(reader, "PBKDF2_READER")
     expect_equal(
         reader$read(20),
         hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6")
     )
-    reader <- PBKDF2_READER("password", "salt", prf=HMAC_SHA_1, iterations=2)
+    reader <- PBKDF2_READER$new("password", "salt", prf=HMAC_SHA_1, iterations=2)
     expect_is(reader, "PBKDF2_READER")
     expect_equal(
         reader$read(20),
         hex2raw("ea6c014d c72d6f8c cd1ed92a ce1d41f0  d8de8957")
     )
-    reader <- PBKDF2_READER("password", "salt", prf=HMAC_SHA_1, iterations=4096)
+    reader <- PBKDF2_READER$new("password", "salt", prf=HMAC_SHA_1, iterations=4096)
     expect_is(reader, "PBKDF2_READER")
     expect_equal(
         reader$read(20),
@@ -102,7 +107,7 @@ test_that("PBKDF2_READER can handle basic operations", {
 
 # SHA-1 IETF RFC 6070 test vectors: longer password and salt, and with special characters; also dkLen != hlen
 test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
-    reader <- PBKDF2_READER("passwordPASSWORDpassword",
+    reader <- PBKDF2_READER$new("passwordPASSWORDpassword",
                      "saltSALTsaltSALTsaltSALTsaltSALTsalt",
                      prf=HMAC_SHA_1, iterations=4096)
     expect_is(reader, "PBKDF2_READER")
@@ -114,7 +119,7 @@ test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
     )
     pass0word  <- c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
     sa0lt  <- c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
-    reader <- PBKDF2_READER(pass0word, sa0lt, prf=HMAC_SHA_1, iterations=4096)
+    reader <- PBKDF2_READER$new(pass0word, sa0lt, prf=HMAC_SHA_1, iterations=4096)
     expect_is(reader, "PBKDF2_READER")
     expect_equal(
         reader$read(16),
