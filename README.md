@@ -46,9 +46,9 @@ IETF RFC 2104
 PBKDF2 Test Vectors  
      https://github.com/Anti-weakpasswords/PBKDF2-Test-Vectors/releases  
      March 2014  
-     Test vectors for PBKDF2 with HMAC -MD-5, SHA-1, -SHA-224, SHA-256, SHA-384, SHA-512  
+     Test vectors for PBKDF2 with HMAC -MD-5, -SHA-1, -SHA-224, -SHA-256, -SHA-384, -SHA-512  
      validated on over a half dozen PBKDF2 implementations (see the author's post at  
-     https://stackoverflow.com/questions/5130513/pbkdf2-hmac-sha2-test-vectors
+     https://stackoverflow.com/questions/5130513/pbkdf2-hmac-sha2-test-vectors)
 
 PBKDF2 HMAC-SHA-2 Test Vectors  
     https://github.com/brycx/Test-Vector-Generation/blob/master/PBKDF2/pbkdf2-hmac-sha2-test-vectors.md  
