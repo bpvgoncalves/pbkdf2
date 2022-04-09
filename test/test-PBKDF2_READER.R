@@ -78,6 +78,38 @@ test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
     )
 })
 
+# Test varying length password and salt, and with special characters; also dkLen != hlen
+test_that("PBKDF2_READER can return key bytes using multiple reads", {
+
+    reader <- PBKDF2_READER$new("passwd", "salt", iterations=1)
+    expect_is(reader, "PBKDF2_READER")
+    expect_equal(
+        reader$read(32),
+        hex2raw(
+            "55ac046e 56e3089f ec1691c2 2544b605  f9418521 6dde0465 e68b9d57 c20dacbc"
+        )
+    )
+    expect_equal(
+        reader$read(64),
+        hex2raw(paste(
+            "49ca9ccc f179b645 991664b3 9d77ef31  7c71b845 b1e30bd5 09112041 d3a19783",
+            "c294e850 150390e1 160c34d6 2e9665d6  59ae49d3 14510fc9 8274cc79 68196810"
+        ))
+    )
+    expect_equal(
+        reader$read(19),
+        hex2raw(
+            "4b8f8923 7e69b2d5 49111868 658be62f  59bd71                             "
+        )
+    )
+    expect_equal(
+        reader$read(32-19),
+        hex2raw(
+            "                                           5c ac44a114 7ed5317c 9bae6b2a"
+        )
+    )
+})
+
 # PBKDF2-HMAC-SHA-1 -----------------------------------------------------------------------
 HMAC_SHA_1 <- function(key, object) {
     hmac(key, object, algo="sha1", raw=TRUE)
