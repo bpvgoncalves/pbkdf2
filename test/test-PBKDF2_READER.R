@@ -78,7 +78,7 @@ test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
     )
 })
 
-# Test varying length password and salt, and with special characters; also dkLen != hlen
+# Test using multiple reads to retrieve key bytes
 test_that("PBKDF2_READER can return key bytes using multiple reads", {
 
     reader <- PBKDF2_READER$new("passwd", "salt", iterations=1)
@@ -111,6 +111,8 @@ test_that("PBKDF2_READER can return key bytes using multiple reads", {
 })
 
 # PBKDF2-HMAC-SHA-1 -----------------------------------------------------------------------
+
+# Pseudorandom function based on HMAC SHA-1
 HMAC_SHA_1 <- function(key, object) {
     hmac(key, object, algo="sha1", raw=TRUE)
 }
