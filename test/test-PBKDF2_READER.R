@@ -1,8 +1,10 @@
 source("../PBKDF2/R/R6/pbkdf2.R", CHDIR=TRUE)
 library(testthat)
 library(wkb)
+library(digest)
+library(openssl)
 
-# PBKDF2-HMAC-SHA-256 ---------------------------------------------------------------------
+# PBKDF2-HMAC-SHA-256 (using built-in default pseudorandom function) ----------------------
 
 # Test various iteration counts, dkLen=hlen-HMAC-SHA-256=32
 test_that("PBKDF2_READER can handle basic operations", {
@@ -110,6 +112,17 @@ test_that("PBKDF2_READER can return key bytes using multiple reads", {
     )
 })
 
+# SHA-256 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
+test_that("PBKDF2_READER can handle tests from pool", {
+  df_tests <- read.csv("../PBKDF2/doc/PBKDF2-HMAC-Various_Test_Vectors-SHA256_small.csv")
+  for (row in nrow(df_tests)) {
+    test <- df_tests[row,]
+    reader <- PBKDF2_READER$new(test$Password, test$Salt, iterations=test$Iterations)
+    result <- reader$read(test$Outputbytes)
+    expect_equal(result, hex2raw(test$SHA.256.0xResultInHex))
+  }
+})
+
 # PBKDF2-HMAC-SHA-1 -----------------------------------------------------------------------
 
 # Pseudorandom function based on HMAC SHA-1
@@ -159,4 +172,87 @@ test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
         reader$read(16),
         hex2raw("56fa6aa7 5548099d cc37d7f0 3425e0c3")
     )
+})
+
+# SHA-1 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
+test_that("PBKDF2_READER can handle tests from pool", {
+  df_tests <- read.csv("../PBKDF2/doc/PBKDF2-HMAC-Various_Test_Vectors-SHA1_small.csv")
+  for (row in nrow(df_tests)) {
+    test <- df_tests[row,]
+    reader <- PBKDF2_READER$new(test$Password, test$Salt, iterations=test$Iterations, prf=HMAC_SHA_1)
+    result <- reader$read(test$Outputbytes)
+    expect_equal(result, hex2raw(test$SHA.1.0xResultInHex))
+  }
+})
+
+# PBKDF2-HMAC-SHA-224 ---------------------------------------------------------------------
+
+# Pseudorandom function based on HMAC SHA-224
+HMAC_SHA_224 <- function(key, object) {
+    sha224(object, key)
+}
+
+# SHA-224 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
+test_that("PBKDF2_READER can handle tests from pool", {
+  df_tests <- read.csv("../PBKDF2/doc/PBKDF2-HMAC-Various_Test_Vectors-SHA224_small.csv")
+  for (row in nrow(df_tests)) {
+    test <- df_tests[row,]
+    reader <- PBKDF2_READER$new(test$Password, test$Salt, iterations=test$Iterations, prf=HMAC_SHA_224)
+    result <- reader$read(test$Outputbytes)
+    expect_equal(result, hex2raw(test$SHA.224.0xResultInHex))
+  }
+})
+
+# PBKDF2-HMAC-SHA-384 ---------------------------------------------------------------------
+
+# Pseudorandom function based on HMAC SHA-384
+HMAC_SHA_384 <- function(key, object) {
+    sha384(object, key)
+}
+
+# SHA-384 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
+test_that("PBKDF2_READER can handle tests from pool", {
+  df_tests <- read.csv("../PBKDF2/doc/PBKDF2-HMAC-Various_Test_Vectors-SHA384_small.csv")
+  for (row in nrow(df_tests)) {
+    test <- df_tests[row,]
+    reader <- PBKDF2_READER$new(test$Password, test$Salt, iterations=test$Iterations, prf=HMAC_SHA_384)
+    result <- reader$read(test$Outputbytes)
+    expect_equal(result, hex2raw(test$SHA.384.0xResultInHex))
+  }
+})
+
+# PBKDF2-HMAC-SHA-512 ---------------------------------------------------------------------
+
+# Pseudorandom function based on HMAC SHA-512
+HMAC_SHA_512 <- function(key, object) {
+    hmac(key, object, algo="sha512", raw=TRUE)
+}
+
+# SHA-512 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
+test_that("PBKDF2_READER can handle tests from pool", {
+  df_tests <- read.csv("../PBKDF2/doc/PBKDF2-HMAC-Various_Test_Vectors-SHA512_small.csv")
+  for (row in nrow(df_tests)) {
+    test <- df_tests[row,]
+    reader <- PBKDF2_READER$new(test$Password, test$Salt, iterations=test$Iterations, prf=HMAC_SHA_512)
+    result <- reader$read(test$Outputbytes)
+    expect_equal(result, hex2raw(test$SHA.512.0xResultInHex))
+  }
+})
+
+# PBKDF2-HMAC-MD5 -------------------------------------------------------------------------
+
+# Pseudorandom function based on HMAC MD5
+HMAC_MD5 <- function(key, object) {
+    hmac(key, object, algo="md5", raw=TRUE)
+}
+
+# MD5 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
+test_that("PBKDF2_READER can handle tests from pool", {
+  df_tests <- read.csv("../PBKDF2/doc/PBKDF2-HMAC-Various_Test_Vectors-MD5_small.csv")
+  for (row in nrow(df_tests)) {
+    test <- df_tests[row,]
+    reader <- PBKDF2_READER$new(test$Password, test$Salt, iterations=test$Iterations, prf=HMAC_MD5)
+    result <- reader$read(test$Outputbytes)
+    expect_equal(result, hex2raw(test$MD5.0xResultInHex))
+  }
 })
