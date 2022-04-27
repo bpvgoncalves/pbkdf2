@@ -15,6 +15,7 @@ This the R6 OOP version. The PBDKF2_READER class is instantiated with the passwo
 ## Unit Tests
 
 In PBKDF2, the actual calculations that map a passphrase and salt to key bytes are carried out in the pseudorandom function, either one specified as an argument, or the default hmac with algorithm sha-256 in the r digest package.  The unit tests verify that the pseudorandom function is called correctly and that the resulting key bytes are assembled and selected correctly to provide the result. The unit tests rely primarily on published test vectors, but can also rely on the results of direct calls to the specified pseudorandom function for some simple cases, such as when the test specifies just one iteration.
+The unit tests implemented check usage with MD5, SHA-1, SHA-224, SHA-384, SHA-256, and SHA-512.  SHA-256 is tested using the default pseudorandom function. All are tested with iterations as large as 10,000, and SHA-256 also at 80,000.  Some tests are built into the unit test source, but many (from Anti-weakpasswords) are specified in .csv files, which makes it easy to add tests to meet unique requirements.
 
 ## References
 
