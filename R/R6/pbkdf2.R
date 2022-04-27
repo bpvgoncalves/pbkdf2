@@ -219,7 +219,22 @@ PBKDF2_READER <- R6Class("PBKDF2_READER",
         },
 
         close = function() {
-            private$closed <- TRUE   # Make the stream of expanded key bytes inaccessible
+
+            # Make the stream of expanded key bytes inaccessible
+            private$closed <- TRUE
+
+            # clear parameters
+            private$passphrase <- NULL
+            private$salt <- NULL
+            private$iterations <- NULL
+            private$prf <- NULL
+
+            # clear state
+            private$index <- NULL
+            private$bytes <- NULL
+
+            # Return the value of closed (TRUE)
+            private$closed
         }
 
     ) # public list

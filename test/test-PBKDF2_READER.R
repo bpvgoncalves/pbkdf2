@@ -31,6 +31,23 @@ test_that("PBKDF2_READER can handle basic operations", {
     )
 })
 
+# Test close makes the stream inaccessible
+test_that("PBKDF2_READER$close() makes further reads return an error", {
+    reader <- PBKDF2_READER$new("password", "salt", iterations=1)
+    expect_is(reader, "PBKDF2_READER")
+    expect_equal(
+        reader$read(32),
+        hex2raw("120fb6cf fcf8b32c 43e72252 56c4f837  a86548c9 2ccc3548 0805987c b70be17b")
+    )
+    expect_equal(
+        reader$close(),
+        TRUE
+    )
+    expect_error(
+        reader$read(1)
+    )
+})
+
 # Test varying length password and salt, and with special characters; also dkLen != hlen
 test_that("PBKDF2_READER can handle pw, salt, dkLen variations", {
 
