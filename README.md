@@ -57,6 +57,11 @@ PBKDF2 HMAC-SHA-2 Test Vectors
     https://github.com/brycx/Test-Vector-Generation/blob/master/PBKDF2/pbkdf2-hmac-sha2-test-vectors.md  
     January 2019
 
+PBKDF2 Python implementation 2007-2011 Dwayne C. Litzenberger   
+    https://www.dlitz.net/software/python-pbkdf2/  
+    https://github.com/dlitz/python-pbkdf2  
+    Python code that the R implementation is modelled on.
+
 FIPS-NIST-180-4  
     Secure Hash Standard,  
     http://dx.doi.org/10.6028/NIST.FIPS.180-4  
