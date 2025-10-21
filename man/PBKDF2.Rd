@@ -4,7 +4,7 @@
 \alias{PBKDF2}
 \title{PBKDF2}
 \usage{
-PBKDF2(passphrase, salt, dkLen, iterations = 1000, prf = HMAC_SHA_256)
+PBKDF2(passphrase, salt, dkLen, iterations = 1000, prf = HMAC_SHA2_256)
 }
 \arguments{
 \item{passphrase}{String to be expanded into a key.}
@@ -16,7 +16,7 @@ PBKDF2(passphrase, salt, dkLen, iterations = 1000, prf = HMAC_SHA_256)
 \item{iterations}{Number of times to apply the pseudorandom function when
 computing a key block in the function f (default: 1000)}
 
-\item{prf}{Pseudorandom function (default: hmac-sha256)}
+\item{prf}{Pseudorandom function (default: hmac-sha2-256)}
 }
 \value{
 \if{html}{\out{<div class="sourceCode">}}\preformatted{      The requested number of bytes from the expanded key
