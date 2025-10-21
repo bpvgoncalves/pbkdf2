@@ -24,3 +24,4 @@ R/r-aes-example.r
 R/pbkdf2.r
 R/pbkdf2_test_vectors.R
 doc/PBKDF2_R6_test_log_20220405.log
+.Rproj.user
