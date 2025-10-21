@@ -47,9 +47,6 @@
 #
 ###########################################################################
 
-if (!require(digest)) install.packages('digest', quiet = TRUE)
-suppressMessages(library (digest))     # HMAC and SHA-256 for pseudorandom function
-
 #' f function
 #'
 #' The internal function f in the PBKDF2 algorithm.  Returns a block of hlen
