@@ -55,10 +55,6 @@ test_that("pw salt dkLen", {
 })
 
 # PBKDF2-HMAC-SHA-1 -----------------------------------------------------------------------
-HMAC_SHA_1 <- function(key, object) {
-    hmac(key, object, algo="sha1", raw=TRUE)
-}
-
 # SHA-1 IETF RFC 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
 test_that("iterations", {
     expect_equal(

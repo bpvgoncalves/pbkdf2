@@ -9,13 +9,13 @@
 # PBKDF2 takes a passphrase and a salt and returns a requested
 # number, dkLen, of key bytes.  It generates the key bytes by repeatedly
 # calling an internal function, f, until it has concatenated together
-# enough blocks to return the requested number of key bytes. 
+# enough blocks to return the requested number of key bytes.
 # The function f recursively calls a pseudorandom function a requested
-# number of iterations to produce a block of bytes to add to the key. 
+# number of iterations to produce a block of bytes to add to the key.
 # The pseudorandom function is usually (and by default) an HMAC based on a
-# hash function, such as specified in FIPS-NIST-198. 
-# The PBKDF2 algorithm is described in detail in IETF RFC 8018. 
-# 
+# hash function, such as specified in FIPS-NIST-198.
+# The PBKDF2 algorithm is described in detail in IETF RFC 8018.
+#
 # This implementation is inspired by the 2007-2011 Python program
 # by Dwayne C. Litzenberger <dlitz@dlitz.net>.  However, it does not
 # use the file-like model, but instead implements the straightforward
@@ -50,48 +50,6 @@
 if (!require(digest)) install.packages('digest', quiet = TRUE)
 suppressMessages(library (digest))     # HMAC and SHA-256 for pseudorandom function
 
-###########################################################################
-# Convert a UTF-8 string to raw bytes.
-#
-# Inputs:
-#   obj     : the UTF-8 string to be converted
-###########################################################################
-makeStringRaw <- function(obj) {
-    result <- obj;
-    if (!is.raw(obj)) {
-        if (is.character(obj)) {
-            if (!validUTF8(obj)) stop("Input to makeStringRaw() must be a valid UTF-8 string or raw bytes.")
-            result <- charToRaw(obj)
-        }
-    }
-    return(result)
-}
-
-###########################################################################
-# Convert an unsigned integer from R numeric to its big-endian binary form.
-# Used to convert the index argument of the f function into the required
-# 4-byte vector to append to the salt.
-#
-# Inputs:
-#   num     : the number, which must be positive with no fractional part
-# Options:
-#   minLen  : the minimum number of bytes in the result
-#             [default: 4]
-###########################################################################
-uintToRaw <- function(num, minLen=4) {
-    if(0 > num) stop(paste(num, "is not positive."))
-    if(0 != num %% 1) stop(paste(num, "is not an integer."))
-    raw <- raw()
-    rem <- num
-    repeat {
-        lo <- rem %% 256
-        rem <- rem %/% 256
-        raw <- c(as.raw(lo), raw)
-        if (rem == 0 && minLen <= length(raw)) break
-    }
-    return(raw)
-}
-
 #' f function
 #'
 #' The internal function f in the PBKDF2 algorithm.  Returns a block of hlen
@@ -121,10 +79,6 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
         }
     }
     return(result)
-}
-
-HMAC_SHA_256 <- function(key, object) {
-    hmac(key, object, algo="sha256", raw=TRUE)
 }
 
 #' PBKDF2
