@@ -92,20 +92,22 @@ uintToRaw <- function(num, minLen=4) {
     return(raw)
 }
 
-###########################################################################
-# The internal function f in the PBKDF2 algorithm.  Returns a block of hlen
-# key bytes, where hlen is the block size of the underlying pseudorandom
-# function, prf().  The pseudorandom function takes a passphrase, a
-# variable-length raw vector; and a salt, also a variable-length raw vector;
-# it returns a (typically fixed length) raw vector.
-#
-# Inputs:
-#   passphrase  : String to be expanded into a key.
-#   salt        : Raw bytes to expand the set of possible keys.
-#   iterations  : Number of times to apply the pseudorandom function
-#   prf:        : Pseudorandom function ()
-#   index       : the block index to append to the salt in the first prf call
-###########################################################################
+#' f function
+#'
+#' The internal function f in the PBKDF2 algorithm.  Returns a block of hlen
+#' key bytes, where hlen is the block size of the underlying pseudorandom
+#' function, prf().  The pseudorandom function takes a passphrase, a
+#' variable-length raw vector; and a salt, also a variable-length raw vector.
+#'
+#' @param passphrase String to be expanded into a key.
+#' @param salt       Raw bytes to expand the set of possible keys.
+#' @param iterations Number of times to apply the pseudorandom function
+#' @param prf        Pseudorandom function()
+#' @param index      the block index to append to the salt in the first prf call
+#'
+#' @returns  It returns a (typically fixed length) raw vector.
+#' @keywords internal
+#'
 f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
     if (!is.numeric(index)) stop("The index must be a number.")
     if (!(0 <= index && index <= ((2^32)-1)))
@@ -121,25 +123,28 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
     return(result)
 }
 
-###########################################################################
-# Get the requested number of bytes from the expanded key.
-#
-# Inputs:
-#   passphrase  : String to be expanded into a key.
-#   salt        : Raw bytes to expand the set of possible keys.
-#   dkLen       : Number of key bytes to return
-# Options:
-#   iterations  : Number of times to apply the pseudorandom function
-#                 when computing a key block in the function f
-#                 [default: 1000]
-#   prf:        : Pseudorandom function
-#                 [default: digest$hmac(algo="sha256")]
-###########################################################################
 HMAC_SHA_256 <- function(key, object) {
     hmac(key, object, algo="sha256", raw=TRUE)
 }
-PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000,
-                      prf=HMAC_SHA_256) {
+
+#' PBKDF2
+#'
+#' Get the requested number of bytes from the expanded key.
+#'
+#' @param passphrase  String to be expanded into a key.
+#' @param salt        Raw bytes to expand the set of possible keys.
+#' @param dkLen       Number of key bytes to return
+#' @param iterations  Number of times to apply the pseudorandom function when
+#'                    computing a key block in the function f (default: 1000)
+#' @param prf         Pseudorandom function (default: hmac-sha256)
+#'
+#' @returns           The requested number of bytes from the expanded key
+#' @export
+#'
+#' @examples
+#' key <- PBKDF2("pass", "salt", 32)
+#'
+PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA_256) {
     passphrase <- makeStringRaw(passphrase)
     salt <- makeStringRaw(salt)
     if (!is.numeric(dkLen)) stop("The dkLen must be a number.")
