@@ -87,7 +87,7 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
 #' @param dkLen       Number of key bytes to return
 #' @param iterations  Number of times to apply the pseudorandom function when
 #'                    computing a key block in the function f (default: 1000)
-#' @param prf         Pseudorandom function (default: hmac-sha256)
+#' @param prf         Pseudorandom function (default: hmac-sha2-256)
 #'
 #' @returns           The requested number of bytes from the expanded key
 #' @export
@@ -95,7 +95,7 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
 #' @examples
 #' key <- PBKDF2("pass", "salt", 32)
 #'
-PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA_256) {
+PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA2_256) {
     passphrase <- makeStringRaw(passphrase)
     salt <- makeStringRaw(salt)
     if (!is.numeric(dkLen)) stop("The dkLen must be a number.")

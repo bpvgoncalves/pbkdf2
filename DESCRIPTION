@@ -8,7 +8,7 @@ Authors@R:
 Description: PBKDF2 takes a passphrase and a salt and returns a requested number of key bytes.
 License: MIT + file LICENSE
 Imports: 
-    digest
+    openssl
 Suggests: 
     testthat (>= 3.0.0),
     wkb
