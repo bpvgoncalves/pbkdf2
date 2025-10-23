@@ -41,3 +41,35 @@ HMAC_SHA2_384 <- function(key, object) {
 HMAC_SHA2_512 <- function(key, object) {
   openssl::sha2(object, 512, key)
 }
+
+
+# PBKDF2-HMAC-SHA3 -----------------------------------------------------------------------
+#' HMAC-SHA3
+#'
+#' Pseudorandom functions to apply HMAC with SHA3 hash algorithms
+#'
+#' @param key     HMAC key
+#' @param object  object ro be hashed
+#' @export
+#' @name HMAC_SHA3
+HMAC_SHA3_224 <- function(key, object) {
+  openssl::sha3(object, 224, key)
+}
+
+#' @rdname HMAC_SHA3
+#' @export
+HMAC_SHA3_256 <- function(key, object) {
+  openssl::sha3(object, 256, key)
+}
+
+#' @rdname HMAC_SHA3
+#' @export
+HMAC_SHA3_384 <- function(key, object) {
+  openssl::sha3(object, 384, key)
+}
+
+#' @rdname HMAC_SHA3
+#' @export
+HMAC_SHA3_512 <- function(key, object) {
+  openssl::sha3(object, 512, key)
+}
