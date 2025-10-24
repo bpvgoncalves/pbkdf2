@@ -7,6 +7,8 @@ Authors@R:
            comment = c(ORCID = "0000-0002-0797-7717")))
 Description: PBKDF2 takes a passphrase and a salt and returns a requested number of key bytes.
 License: MIT + file LICENSE
+Depends: 
+    R (>= 3.5)
 Imports: 
     openssl
 Suggests: 

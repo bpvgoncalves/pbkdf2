@@ -42,3 +42,20 @@ uintToRaw <- function(num, minLen=4) {
   }
   return(raw)
 }
+
+#' @keywords internal
+#'
+name_to_oid <- function(n) {
+
+  algorithm_list[algorithm_list$frdly_name == n, 1]
+
+}
+
+#' @keywords internal
+#'
+oid_to_name <- function(o) {
+
+  algorithm_list[algorithm_list$oid == o, 2]
+
+}
+
