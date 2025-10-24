@@ -89,7 +89,8 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
 #'                    computing a key block in the function f (default: 1000)
 #' @param prf         Pseudorandom function (default: hmac-sha2-256)
 #'
-#' @returns           The requested number of bytes from the expanded key
+#' @returns           A `pbkdf2_key' object including the key of requested
+#'                    length and metadata about key generation.
 #' @export
 #'
 #' @examples
@@ -111,5 +112,9 @@ PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA2_256) 
         bytes <- c(bytes, block)
         index <- index + 1
     }
-    return(bytes[1:dkLen])
+
+    params <- list(salt = salt, len = dkLen, iter = iterations, prf = deparse(substitute(prf)))
+    params <- structure(params, class = c("pbkdf2_parameters", class(params)))
+
+    structure(list(masterkey = bytes[1:dkLen], parameters = params), class = "pbkdf2_key")
 }

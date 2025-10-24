@@ -19,7 +19,8 @@ computing a key block in the function f (default: 1000)}
 \item{prf}{Pseudorandom function (default: hmac-sha2-256)}
 }
 \value{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{      The requested number of bytes from the expanded key
+\if{html}{\out{<div class="sourceCode">}}\preformatted{      A `pbkdf2_key' object including the key of requested
+               length and metadata about key generation.
 }\if{html}{\out{</div>}}
 }
 \description{
