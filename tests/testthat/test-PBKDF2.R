@@ -10,7 +10,7 @@ test_that("HMAC-SHA1: iterations", {
     expect_equal(result$parameters$salt, charToRaw("salt"))
     expect_equal(result$parameters$len, 20)
     expect_equal(result$parameters$iter, 1)
-    expect_equal(result$parameters$prf, "HMAC_SHA1")
+    expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
 
     result <- PBKDF2("password", "salt", 20, prf=HMAC_SHA1, iterations=2)
     expect_true(inherits(result, "pbkdf2_key"))
@@ -20,7 +20,7 @@ test_that("HMAC-SHA1: iterations", {
     expect_equal(result$parameters$salt, charToRaw("salt"))
     expect_equal(result$parameters$len, 20)
     expect_equal(result$parameters$iter, 2)
-    expect_equal(result$parameters$prf, "HMAC_SHA1")
+    expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
 
     result <- PBKDF2("password", "salt", 20, prf=HMAC_SHA1, iterations=4096)
     expect_true(inherits(result, "pbkdf2_key"))
@@ -30,7 +30,7 @@ test_that("HMAC-SHA1: iterations", {
     expect_equal(result$parameters$salt, charToRaw("salt"))
     expect_equal(result$parameters$len, 20)
     expect_equal(result$parameters$iter, 4096)
-    expect_equal(result$parameters$prf, "HMAC_SHA1")
+    expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
 })
 
 # SHA-1 IETF RFC 6070 test vectors: longer password and salt, and with special characters; also dkLen != hlen
@@ -60,7 +60,7 @@ test_that("HMAC-SHA1: PBKDF2 can handle tests from pool", {
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
     expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "HMAC_SHA1")
+    expect_equal(result[[2]][[4]], "1.3.6.1.5.5.8.1.2")
   }
 })
 
@@ -76,7 +76,7 @@ test_that("HMAC-SHA2-224: PBKDF2 can handle tests from pool", {
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
     expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "HMAC_SHA2_224")
+    expect_equal(result[[2]][[4]], "1.2.840.113549.2.8")
   }
 })
 
@@ -138,7 +138,7 @@ test_that("HMAC-SHA2-256: PBKDF2 can handle adhoc tests and tests from pool", {
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
     expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "HMAC_SHA2_256")
+    expect_equal(result[[2]][[4]], "1.2.840.113549.2.9")
   }
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
@@ -157,7 +157,7 @@ test_that("HMAC-SHA2-384: PBKDF2 can handle tests from pool", {
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
     expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "HMAC_SHA2_384")
+    expect_equal(result[[2]][[4]], "1.2.840.113549.2.10")
   }
 })
 
@@ -171,7 +171,7 @@ test_that("HMAC-SHA2-512: PBKDF2 can handle tests from small pool", {
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
     expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "HMAC_SHA2_512")
+    expect_equal(result[[2]][[4]], "1.2.840.113549.2.11")
   }
 })
 

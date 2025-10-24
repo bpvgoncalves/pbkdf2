@@ -113,7 +113,10 @@ PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA2_256) 
         index <- index + 1
     }
 
-    params <- list(salt = salt, len = dkLen, iter = iterations, prf = deparse(substitute(prf)))
+    params <- list(salt = salt,
+                   len = dkLen,
+                   iter = iterations,
+                   prf = name_to_oid(deparse(substitute(prf))))
     params <- structure(params, class = c("pbkdf2_parameters", class(params)))
 
     structure(list(masterkey = bytes[1:dkLen], parameters = params), class = "pbkdf2_key")
