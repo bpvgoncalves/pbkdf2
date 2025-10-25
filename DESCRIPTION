@@ -1,17 +1,26 @@
 Package: pbkdf2
 Title: PKCS #5: Password-Based Key Derivation Function
 Version: 0.0.0.9000
-Authors@R:
-  c(person("Sigfredo Ismael", "Nin Colón", , "signin@email.com", role = c("aut", "cre")),
-    person("Bruno", "Gonçalves", , "bpvgoncalves@users.noreply.github.com", role = c("aut", "ctr"),
-           comment = c(ORCID = "0000-0002-0797-7717")))
-Description: PBKDF2 takes a passphrase and a salt and returns a requested number of key bytes.
+Authors@R: c(
+    person("Sigfredo Ismael", "Nin Colón",
+           email = "signin@email.com",
+           role = c("aut", "cph"),
+           comment = "Original author of the codebase (MIT license, 2022)"),
+    person("Bruno", "Gonçalves",
+           email = "bpvgoncalves@users.noreply.github.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0797-7717",
+                       "Packaged and extended the original code")))
+Description: Implements the Password-Based Key Derivation Function 2 (PBKDF2)
+    according to the PKCS #5 v2.1 standard. The core implementation is derived
+    from the original work by Sigfredo Ismael Nin Colón (MIT License, 2022)
+    and has been packaged, refactored, and extended to better integrate with R.
 License: MIT + file LICENSE
-Depends: 
+Depends:
     R (>= 3.5)
-Imports: 
+Imports:
     openssl
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),

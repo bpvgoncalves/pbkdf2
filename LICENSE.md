@@ -1,6 +1,7 @@
 # MIT License
 
-Copyright (c) 2022 pbkdf2 authors
+Copyright (c) 2022 Sigfredo Ismael Nin Colón (signin@email.com)
+Copyright (c) 2025 pbkdf2 authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
