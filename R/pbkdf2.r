@@ -104,7 +104,23 @@ PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA2_256) 
     if (!is.numeric(iterations)) stop("The iterations count must be a number.")
     if (iterations < 1) stop("The iterations count must be at least 1.")
     if (iterations > 2^32-1) stop("The iterations count cannot exceed 2^32-1 (0xFFFFFFFF).")
-    if (!is.function(prf)) stop("The pseudorandom function prf must be a callable function.")
+    if (is.null(prf)) stop("The pseudorandom function prf must be a callable PRF function or OID.")
+    if (!is.function(prf)) {
+        if (is.character(prf) & prf %in% algorithm_list$oid) {
+            algo <- prf
+            prf <- get(oid_to_name(prf))
+        } else if (is.character(prf) & prf %in% algorithm_list$frdly_name) {
+            algo <- name_to_oid(prf)
+            prf <- get(prf)
+        } else {
+            stop("The pseudorandom function prf must be a callable PRF function or OID.")
+        }
+    } else {
+        if (!(deparse(substitute(prf)) %in% algorithm_list$frdly_name)) {
+            stop("The pseudorandom function prf must be a known PRF function or OID.")
+        }
+        algo <- name_to_oid(deparse(substitute(prf)))
+    }
     bytes <- raw()
     index <- 1
     while (length(bytes) < dkLen) {
@@ -116,7 +132,7 @@ PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA2_256) 
     params <- list(salt = salt,
                    len = dkLen,
                    iter = iterations,
-                   prf = name_to_oid(deparse(substitute(prf))))
+                   prf = algo)
     params <- structure(params, class = c("pbkdf2_parameters", class(params)))
 
     structure(list(masterkey = bytes[1:dkLen], parameters = params), class = "pbkdf2_key")
