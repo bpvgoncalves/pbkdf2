@@ -11,22 +11,45 @@ PBKDF2(passphrase, salt, dkLen, iterations = 1000, prf = HMAC_SHA2_256)
 
 \item{salt}{Raw bytes to expand the set of possible keys.}
 
-\item{dkLen}{Number of key bytes to return}
+\item{dkLen}{Number of key bytes to return.}
 
 \item{iterations}{Number of times to apply the pseudorandom function when
-computing a key block in the function f (default: 1000)}
+computing a key block in the function f (default = 1000)}
 
-\item{prf}{Pseudorandom function (default: hmac-sha2-256)}
+\item{prf}{Pseudorandom function (default = HMAC_SHA2_256)}
 }
 \value{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{      A `pbkdf2_key' object including the key of requested
-               length and metadata about key generation.
-}\if{html}{\out{</div>}}
+An object of type \code{pbkdf2_key}, including a key with the requested
+length and metadata about the key generation.
 }
 \description{
 Get the requested number of bytes from the expanded key.
 }
+\details{
+PBKDF2 takes a passphrase and a salt and returns a requested number -
+dkLen - of key bytes.   It generates the key bytes by repeatedly
+calling an internal function, f, until it has concatenated together
+enough blocks to return the requested number of key bytes.
+The function f recursively calls a pseudorandom function a requested
+number of iterations to produce a block of bytes to add to the key.
+The pseudorandom function is usually (and by default) an HMAC based
+on a hash function, such as specified in FIPS-NIST-198.
+The PBKDF2 algorithm is described in detail in IETF RFC 8018.
+
+This implementation is inspired by the 2007-2011 Python program
+by Dwayne C. Litzenberger \href{mailto:dlitz@dlitz.net}{dlitz@dlitz.net}.  However, it does not
+use the file-like model, but instead implements the straightforward
+model from RFC 8018 in which a single call to PBKDF2 generates and
+returns all of the requested dkLen key bytes.
+}
 \examples{
 key <- PBKDF2("pass", "salt", 32)
+key
 
+}
+\references{
+\itemize{
+\item IETF RFC 8018 January 2017
+\item NIST FIPS-198
+}
 }
