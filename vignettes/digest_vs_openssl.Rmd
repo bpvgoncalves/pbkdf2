@@ -1,0 +1,100 @@
+---
+title: "Backend Migration: `digest` vs. `openssl`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{digest_vs_openssl}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+Starting with commit *44865d2e2d400a0e075a596ce766002655fa36da*, the internal cryptographic backend 
+used for HMAC-based key derivation functions (such as PBKDF2) has been migrated from the 
+**`digest`** package to the **`openssl`** package.
+
+The move from **`digest`** to **`openssl`** represents a natural evolution toward faster, 
+standards-aligned, and more maintainable cryptography within the package ecosystem.
+
+This change was motivated by performance and security improvements, better alignment with modern
+cryptographic standards, and enhanced long-term maintainability.
+All outputs remain **bit-identical** to those produced by the previous backend, ensuring **full 
+backward compatibility**.
+
+---
+
+## Benchmark and Results
+
+The following benchmark compares both implementations on a typical PBKDF2-HMAC-SHA256 derivation:
+
+``` r
+library(pbkdf2)
+
+# digest backend
+system.time({
+  HMAC_SHA2_256 <- function(key, object) {
+    digest::hmac(key, object, "sha256", raw = TRUE)
+  }
+  for (i in 1:100) {
+    dig_res <- PBKDF2("test", "salt", 32, 1500, prf = HMAC_SHA2_256)
+  }
+})
+#>    user  system elapsed 
+#>  42.890   0.041  44.123
+
+# openssl backend
+system.time({
+  HMAC_SHA2_256 <- function(key, object) {
+    openssl::sha2(object, 256, key)
+  }
+  for (i in 1:100) {
+    open_res <- PBKDF2("test", "salt", 32, 1500, prf = HMAC_SHA2_256)
+  }
+})
+#>    user  system elapsed 
+#>   6.511   0.002   6.515
+
+identical(open_res, dig_res)
+#> [1] TRUE
+```
+<sup>Created on 2025-10-25 with [reprex v2.1.1](https://reprex.tidyverse.org)</sup>
+
+
+**Benchmark results (typical system):**
+
+
+| Backend     | Time (elapsed)  | Relative Performance |
+| ----------- | --------------- | -------------------- |
+| **digest**  | ~44.12 seconds  | 1×                   |
+| **openssl** |  ~6.52 seconds  | >6.5× **faster**     |
+
+Both implementations produce identical results, confirming full interoperability and correctness.
+
+---
+
+## Rationale for Migration
+
+1. **Performance Improvements**
+   The OpenSSL backend yields 6-7× faster PBKDF2 iterations, especially beneficial in password-based
+   derivations or repeated key stretching scenarios.
+
+2. **Security Compliance**
+   OpenSSL provides rigorously maintained cryptographic primitives that comply with modern standards
+   (FIPS-capable on supported systems).
+
+3. **Feature Completeness**
+   Enables easier extension to other algorithms (e.g., HMAC-SHA3).
+
+4. **Maintenance and Consistency**
+   Consolidating all cryptographic operations under the `openssl` package simplifies maintenance, 
+   improves transparency, and leverages the wide testing base of OpenSSL.
+
+---
+
+## Compatibility
+
+This migration is **transparent to users**:
+
+* All derived keys remain bit-identical to original version of the code.
+* No changes were required to existing code, tests, or persisted data.
+* The API and semantics of PBKDF2 function are unchanged.
