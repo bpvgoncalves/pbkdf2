@@ -242,6 +242,7 @@ test_that("HMAC-SHA2-*: PBKDF2 can handle tests from full pool", {
 
   skip_on_cran()
   skip_on_ci()
+  skip_on_covr()
 
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA224_all.csv")
   for (row in 1:nrow(df_tests)) {
