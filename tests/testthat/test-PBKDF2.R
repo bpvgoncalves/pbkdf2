@@ -1,8 +1,71 @@
+# PBKDF2 WRONG INPUTS -----------------------------------------------------------------------
+test_that("PBKDF2 fails with wrong lenght", {
+
+  expect_error(PBKDF2("pass", "salt", "sixteen"), "dkLen must be a number")
+  expect_error(PBKDF2("pass", "salt", NA), "dkLen must be a number")
+  expect_error(PBKDF2("pass", "salt", NULL), "dkLen must be a number")
+  expect_error(PBKDF2("pass", "salt", TRUE), "dkLen must be a number")
+
+  expect_error(PBKDF2("pass", "salt", 0), "dkLen must be at least 1")
+  expect_error(PBKDF2("pass", "salt", -32), "dkLen must be at least 1")
+
+  expect_error(PBKDF2("pass", "salt", 8.8), "dkLen must be an integer")
+
+})
+
+test_that("PBKDF2 fails with wrong iteration", {
+
+  expect_error(PBKDF2("pass", "salt", 16, "five hundred"), "iterations count must be a number")
+  expect_error(PBKDF2("pass", "salt", 16, NA), "iterations count must be a number")
+  expect_error(PBKDF2("pass", "salt", 16, NULL), "iterations count must be a number")
+  expect_error(PBKDF2("pass", "salt", 16, TRUE), "iterations count must be a number")
+
+  expect_error(PBKDF2("pass", "salt", 16, 0), "iterations count must be at least 1")
+  expect_error(PBKDF2("pass", "salt", 16, -32), "iterations count must be at least 1")
+  expect_error(PBKDF2("pass", "salt", 16, 2^32))
+
+  expect_error(PBKDF2("pass", "salt", 16, 8.8), "iterations count must be an integer")
+
+})
+
+test_that("PBKDF2 fails with wrong PRF info", {
+
+  expect_error(PBKDF2("pass", "salt", 16, 100, "not-a-prf"), "must be a callable PRF function")
+  expect_error(PBKDF2("pass", "salt", 16, 100, "1.2.3.not.an.oid"), "must be a callable PRF function")
+  expect_error(PBKDF2("pass", "salt", 16, 100, NA), "must be a callable PRF function")
+  expect_error(PBKDF2("pass", "salt", 16, 100, NULL), "must be a callable PRF function")
+  expect_error(PBKDF2("pass", "salt", 16, 100, TRUE), "must be a callable PRF function")
+
+  expect_error(PBKDF2("pass", "salt", 16, 100, sum), "must be a known PRF function")
+
+})
+
+
 # PBKDF2-HMAC-SHA1 -----------------------------------------------------------------------
 # SHA-1 IETF RFC 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
 test_that("HMAC-SHA1: iterations", {
 
     result <- PBKDF2("password", "salt", 20, prf=HMAC_SHA1, iterations=1)
+    expect_true(inherits(result, "pbkdf2_key"))
+    expect_true(inherits(result$masterkey, "raw"))
+    expect_equal(result$masterkey, wkb::hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6"))
+    expect_true(inherits(result$parameters, "pbkdf2_parameters"))
+    expect_equal(result$parameters$salt, charToRaw("salt"))
+    expect_equal(result$parameters$len, 20)
+    expect_equal(result$parameters$iter, 1)
+    expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
+
+    result <- PBKDF2("password", "salt", 20, prf="HMAC_SHA1", iterations=1)
+    expect_true(inherits(result, "pbkdf2_key"))
+    expect_true(inherits(result$masterkey, "raw"))
+    expect_equal(result$masterkey, wkb::hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6"))
+    expect_true(inherits(result$parameters, "pbkdf2_parameters"))
+    expect_equal(result$parameters$salt, charToRaw("salt"))
+    expect_equal(result$parameters$len, 20)
+    expect_equal(result$parameters$iter, 1)
+    expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
+
+    result <- PBKDF2("password", "salt", 20, prf="1.3.6.1.5.5.8.1.2", iterations=1)
     expect_true(inherits(result, "pbkdf2_key"))
     expect_true(inherits(result$masterkey, "raw"))
     expect_equal(result$masterkey, wkb::hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6"))
@@ -212,3 +275,4 @@ test_that("HMAC-SHA2-*: PBKDF2 can handle tests from full pool", {
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.512.0xResultInHex))
   }
 })
+
