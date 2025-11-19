@@ -129,12 +129,12 @@ test_that("HMAC-SHA1: PBKDF2 can handle tests from pool", {
 
 
 # PBKDF2-HMAC-SHA2 ---------------------------------------------------------------------
-# SHA2-224 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
-test_that("HMAC-SHA2-224: PBKDF2 can handle tests from pool", {
+# sha224 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
+test_that("HMAC-SHA224: PBKDF2 can handle tests from pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA224_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA2_224)
+    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA224)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.224.0xResultInHex))
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
@@ -143,7 +143,7 @@ test_that("HMAC-SHA2-224: PBKDF2 can handle tests from pool", {
   }
 })
 
-test_that("HMAC-SHA2-256: PBKDF2 can handle adhoc tests and tests from pool", {
+test_that("HMAC-SHA256: PBKDF2 can handle adhoc tests and tests from pool", {
 
   # Test various iteration counts, dkLen=hlen-HMAC-SHA-256=32
   expect_equal(
@@ -205,17 +205,17 @@ test_that("HMAC-SHA2-256: PBKDF2 can handle adhoc tests and tests from pool", {
   }
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA2_256)
+    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA256)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.256.0xResultInHex))
   }
 })
 
 # SHA-384 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
-test_that("HMAC-SHA2-384: PBKDF2 can handle tests from pool", {
+test_that("HMAC-SHA384: PBKDF2 can handle tests from pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA384_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA2_384)
+    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA384)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.384.0xResultInHex))
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
@@ -225,11 +225,11 @@ test_that("HMAC-SHA2-384: PBKDF2 can handle tests from pool", {
 })
 
 # SHA-512 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
-test_that("HMAC-SHA2-512: PBKDF2 can handle tests from small pool", {
+test_that("HMAC-SHA512: PBKDF2 can handle tests from small pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA512_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA2_512)
+    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA512)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.512.0xResultInHex))
     expect_equal(result[[2]][[1]], charToRaw(test$Salt))
     expect_equal(result[[2]][[2]], test$Outputbytes)
@@ -238,7 +238,7 @@ test_that("HMAC-SHA2-512: PBKDF2 can handle tests from small pool", {
   }
 })
 
-test_that("HMAC-SHA2-*: PBKDF2 can handle tests from full pool", {
+test_that("HMAC-SHA*: PBKDF2 can handle tests from full pool", {
 
   skip_on_cran()
   skip_on_ci()
@@ -248,7 +248,7 @@ test_that("HMAC-SHA2-*: PBKDF2 can handle tests from full pool", {
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
     if (test$Iterations > 100000) next # These will take too long to test
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA2_224)
+    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA224)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.224.0xResultInHex))
   }
 
@@ -264,7 +264,7 @@ test_that("HMAC-SHA2-*: PBKDF2 can handle tests from full pool", {
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
     if (test$Iterations > 100000) next # These will take too long to test
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA2_384)
+    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA384)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.384.0xResultInHex))
   }
 
@@ -272,7 +272,7 @@ test_that("HMAC-SHA2-*: PBKDF2 can handle tests from full pool", {
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
     if (test$Iterations > 100000) next # These will take too long to test
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA2_512)
+    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA512)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.512.0xResultInHex))
   }
 })

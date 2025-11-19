@@ -4,7 +4,7 @@
 \alias{PBKDF2}
 \title{PBKDF2}
 \usage{
-PBKDF2(passphrase, salt, dkLen, iterations = 1000, prf = HMAC_SHA2_256)
+PBKDF2(passphrase, salt, dkLen, iterations = 1000, prf = HMAC_SHA256)
 }
 \arguments{
 \item{passphrase}{String to be expanded into a key.}

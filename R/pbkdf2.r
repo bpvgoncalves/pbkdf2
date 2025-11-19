@@ -74,7 +74,7 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
 #' key <- PBKDF2("pass", "salt", 32)
 #' key
 #'
-PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA2_256) {
+PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA256) {
     passphrase <- makeStringRaw(passphrase)
     salt <- makeStringRaw(salt)
     if (!is.numeric(dkLen)) stop("The dkLen must be a number.")

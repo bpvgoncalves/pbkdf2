@@ -1,6 +1,6 @@
 # Example test vectors from:
 # https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-224.ipd.pdf (Appendix B)
-test_that("hmac-sha2-224", {
+test_that("hmac-sha224", {
 
   # SHA-224
   # (tcid = 751)
@@ -8,26 +8,26 @@ test_that("hmac-sha2-224", {
   # message 671 128 EA008790 F4F4BB46 93BD17FD 726517BE
   # tag     672 160 7D832AE4 6647B47A EEE26B65 F5F1E518 05C78F1E
   tag_len <- 160/8
-  result <- HMAC_SHA2_224(wkb::hex2raw("E44E3C28 37D83501 BD5B5403 AF653DC6 08A2B217 689E"),
+  result <- HMAC_SHA224(wkb::hex2raw("E44E3C28 37D83501 BD5B5403 AF653DC6 08A2B217 689E"),
                           wkb::hex2raw("EA008790 F4F4BB46 93BD17FD 726517BE"))
 
   expect_equal(result[1:tag_len], wkb::hex2raw("7D832AE4 6647B47A EEE26B65 F5F1E518 05C78F1E"))
 })
 
-test_that("hmac-sha2-256", {
+test_that("hmac-sha256", {
   # SHA-256
   # (tcid = 151)
   # key     673 136 C8D46CBF 65271FCC 60DB02E4 D7CC4BD8 75
   # message 674 128 063F0B6E 8960826C FBE35EBD B01B47EA
   # tag     675 128 6B800744 B38D0A9F 2B9D64C5 82F7D6D9
   tag_len <- 128/8
-  result <- HMAC_SHA2_256(wkb::hex2raw("C8D46CBF 65271FCC 60DB02E4 D7CC4BD8 75"),
+  result <- HMAC_SHA256(wkb::hex2raw("C8D46CBF 65271FCC 60DB02E4 D7CC4BD8 75"),
                           wkb::hex2raw("063F0B6E 8960826C FBE35EBD B01B47EA"))
 
   expect_equal(result[1:tag_len], wkb::hex2raw("6B800744 B38D0A9F 2B9D64C5 82F7D6D9"))
 })
 
-test_that("hmac-sha2-384", {
+test_that("hmac-sha384", {
   # SHA-384
   # (tcid = 751)
   # key     676 448 D122EA65 7D8E3D5C 5B69C9FE 4AB7368D 508E500C 3EA2E528 D346547A
@@ -35,20 +35,20 @@ test_that("hmac-sha2-384", {
   # message 677 128 3933069E 5E5A5BB0 AAB68C3C 1F9FCAF7
   # tag     678  80 7DD24D9A E7A9D82E A6CA
   tag_len <- 80/8
-  result <- HMAC_SHA2_384(wkb::hex2raw("D122EA65 7D8E3D5C 5B69C9FE 4AB7368D 508E500C 3EA2E528 D346547A 72987086 C97668B7 C139058A 3F454144 832FF7FF 31FFD48F 25936E3A"),
+  result <- HMAC_SHA384(wkb::hex2raw("D122EA65 7D8E3D5C 5B69C9FE 4AB7368D 508E500C 3EA2E528 D346547A 72987086 C97668B7 C139058A 3F454144 832FF7FF 31FFD48F 25936E3A"),
                           wkb::hex2raw("3933069E 5E5A5BB0 AAB68C3C 1F9FCAF7"))
 
   expect_equal(result[1:tag_len], wkb::hex2raw("7DD24D9A E7A9D82E A6CA"))
 })
 
-test_that("hmac-sha2-512", {
+test_that("hmac-sha512", {
   # SHA-512
   # (tcid = 1)
   # key     679 384 F9E2E43A 5FBAB3E2 4FEC3A76 C2496883 70544FFA D051FE90 4531C3FE B66DE453 DF0A24BB D1B3A43C 34788732 651EBA8A
   # message 680 128 ED39A835 34D4D989 C6B25FA8 A563F51C
   # tag     681  80 7A047975 A81D30E9 CF18
   tag_len <- 80/8
-  result <- HMAC_SHA2_512(wkb::hex2raw("F9E2E43A 5FBAB3E2 4FEC3A76 C2496883 70544FFA D051FE90 4531C3FE B66DE453 DF0A24BB D1B3A43C 34788732 651EBA8A"),
+  result <- HMAC_SHA512(wkb::hex2raw("F9E2E43A 5FBAB3E2 4FEC3A76 C2496883 70544FFA D051FE90 4531C3FE B66DE453 DF0A24BB D1B3A43C 34788732 651EBA8A"),
                           wkb::hex2raw("ED39A835 34D4D989 C6B25FA8 A563F51C"))
 
   expect_equal(result[1:tag_len], wkb::hex2raw("7A047975 A81D30E9 CF18"))

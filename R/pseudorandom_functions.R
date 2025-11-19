@@ -20,25 +20,25 @@ HMAC_SHA1 <- function(key, object) {
 #' @param object  object ro be hashed
 #' @export
 #' @name HMAC_SHA2
-HMAC_SHA2_224 <- function(key, object) {
+HMAC_SHA224 <- function(key, object) {
   openssl::sha2(object, 224, key)
 }
 
 #' @rdname HMAC_SHA2
 #' @export
-HMAC_SHA2_256 <- function(key, object) {
+HMAC_SHA256 <- function(key, object) {
   openssl::sha2(object, 256, key)
 }
 
 #' @rdname HMAC_SHA2
 #' @export
-HMAC_SHA2_384 <- function(key, object) {
+HMAC_SHA384 <- function(key, object) {
   openssl::sha2(object, 384, key)
 }
 
 #' @rdname HMAC_SHA2
 #' @export
-HMAC_SHA2_512 <- function(key, object) {
+HMAC_SHA512 <- function(key, object) {
   openssl::sha2(object, 512, key)
 }
 

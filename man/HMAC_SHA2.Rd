@@ -2,19 +2,19 @@
 % Please edit documentation in R/pseudorandom_functions.R
 \name{HMAC_SHA2}
 \alias{HMAC_SHA2}
-\alias{HMAC_SHA2_224}
-\alias{HMAC_SHA2_256}
-\alias{HMAC_SHA2_384}
-\alias{HMAC_SHA2_512}
+\alias{HMAC_SHA224}
+\alias{HMAC_SHA256}
+\alias{HMAC_SHA384}
+\alias{HMAC_SHA512}
 \title{HMAC-SHA2}
 \usage{
-HMAC_SHA2_224(key, object)
+HMAC_SHA224(key, object)
 
-HMAC_SHA2_256(key, object)
+HMAC_SHA256(key, object)
 
-HMAC_SHA2_384(key, object)
+HMAC_SHA384(key, object)
 
-HMAC_SHA2_512(key, object)
+HMAC_SHA512(key, object)
 }
 \arguments{
 \item{key}{HMAC key}
