@@ -63,18 +63,18 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
 #' @param dkLen       Number of key bytes to return.
 #' @param iterations  Number of times to apply the pseudorandom function when
 #'                    computing a key block in the function f (default = 1000)
-#' @param prf         Pseudorandom function (default = HMAC_SHA2_256)
+#' @param prf         Pseudorandom function (default = HMAC_SHA256)
 #'
-#' @returns  An object of type `pbkdf2_key`, including a key with the requested
+#' @returns  An object of type `pbkdf2_result`, including a key with the requested
 #' length and metadata about the key generation.
 #'
 #' @export
 #'
 #' @examples
-#' key <- PBKDF2("pass", "salt", 32)
+#' key <- rkdf_kdf_pbkdf2("pass", "salt", 32)
 #' key
 #'
-PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA256) {
+rkdf_kdf_pbkdf2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA256) {
     passphrase <- makeStringRaw(passphrase)
     salt <- makeStringRaw(salt)
     if (!is.numeric(dkLen)) stop("The dkLen must be a number.")
@@ -115,5 +115,10 @@ PBKDF2 <- function(passphrase, salt, dkLen, iterations=1000, prf=HMAC_SHA256) {
                    prf = algo)
     params <- structure(params, class = c("pbkdf2_parameters", class(params)))
 
-    structure(list(masterkey = bytes[1:dkLen], parameters = params), class = "pbkdf2_key")
+    structure(list(masterkey = bytes[1:dkLen],
+                   algorithm = "pbkdf2",
+                   parameters = params,
+                   timestamp = strftime(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz="UTC")),
+              class = c("pbkdf2_result", "rkdf_result"))
+
 }

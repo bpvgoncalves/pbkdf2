@@ -1,42 +1,42 @@
 # PBKDF2 WRONG INPUTS -----------------------------------------------------------------------
-test_that("PBKDF2 fails with wrong lenght", {
+test_that("rkdf_kdf_pbkdf2() fails with wrong lenght", {
 
-  expect_error(PBKDF2("pass", "salt", "sixteen"), "dkLen must be a number")
-  expect_error(PBKDF2("pass", "salt", NA), "dkLen must be a number")
-  expect_error(PBKDF2("pass", "salt", NULL), "dkLen must be a number")
-  expect_error(PBKDF2("pass", "salt", TRUE), "dkLen must be a number")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", "sixteen"), "dkLen must be a number")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", NA), "dkLen must be a number")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", NULL), "dkLen must be a number")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", TRUE), "dkLen must be a number")
 
-  expect_error(PBKDF2("pass", "salt", 0), "dkLen must be at least 1")
-  expect_error(PBKDF2("pass", "salt", -32), "dkLen must be at least 1")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 0), "dkLen must be at least 1")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", -32), "dkLen must be at least 1")
 
-  expect_error(PBKDF2("pass", "salt", 8.8), "dkLen must be an integer")
-
-})
-
-test_that("PBKDF2 fails with wrong iteration", {
-
-  expect_error(PBKDF2("pass", "salt", 16, "five hundred"), "iterations count must be a number")
-  expect_error(PBKDF2("pass", "salt", 16, NA), "iterations count must be a number")
-  expect_error(PBKDF2("pass", "salt", 16, NULL), "iterations count must be a number")
-  expect_error(PBKDF2("pass", "salt", 16, TRUE), "iterations count must be a number")
-
-  expect_error(PBKDF2("pass", "salt", 16, 0), "iterations count must be at least 1")
-  expect_error(PBKDF2("pass", "salt", 16, -32), "iterations count must be at least 1")
-  expect_error(PBKDF2("pass", "salt", 16, 2^32))
-
-  expect_error(PBKDF2("pass", "salt", 16, 8.8), "iterations count must be an integer")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 8.8), "dkLen must be an integer")
 
 })
 
-test_that("PBKDF2 fails with wrong PRF info", {
+test_that("rkdf_kdf_pbkdf2() fails with wrong iteration", {
 
-  expect_error(PBKDF2("pass", "salt", 16, 100, "not-a-prf"), "must be a callable PRF function")
-  expect_error(PBKDF2("pass", "salt", 16, 100, "1.2.3.not.an.oid"), "must be a callable PRF function")
-  expect_error(PBKDF2("pass", "salt", 16, 100, NA), "must be a callable PRF function")
-  expect_error(PBKDF2("pass", "salt", 16, 100, NULL), "must be a callable PRF function")
-  expect_error(PBKDF2("pass", "salt", 16, 100, TRUE), "must be a callable PRF function")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, "five hundred"), "iterations count must be a number")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, NA), "iterations count must be a number")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, NULL), "iterations count must be a number")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, TRUE), "iterations count must be a number")
 
-  expect_error(PBKDF2("pass", "salt", 16, 100, sum), "must be a known PRF function")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 0), "iterations count must be at least 1")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, -32), "iterations count must be at least 1")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 2^32))
+
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 8.8), "iterations count must be an integer")
+
+})
+
+test_that("rkdf_kdf_pbkdf2() fails with wrong PRF info", {
+
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 100, "not-a-prf"), "must be a callable PRF function")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 100, "1.2.3.not.an.oid"), "must be a callable PRF function")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 100, NA), "must be a callable PRF function")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 100, NULL), "must be a callable PRF function")
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 100, TRUE), "must be a callable PRF function")
+
+  expect_error(rkdf_kdf_pbkdf2("pass", "salt", 16, 100, sum), "must be a known PRF function")
 
 })
 
@@ -45,8 +45,8 @@ test_that("PBKDF2 fails with wrong PRF info", {
 # SHA-1 IETF RFC 6070 test vectors: various iteration counts, dkLen=hlen-HMAC-SHA-1=20
 test_that("HMAC-SHA1: iterations", {
 
-    result <- PBKDF2("password", "salt", 20, prf=HMAC_SHA1, iterations=1)
-    expect_true(inherits(result, "pbkdf2_key"))
+    result <- rkdf_kdf_pbkdf2("password", "salt", 20, prf=HMAC_SHA1, iterations=1)
+    expect_true(inherits(result, "pbkdf2_result"))
     expect_true(inherits(result$masterkey, "raw"))
     expect_equal(result$masterkey, wkb::hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6"))
     expect_true(inherits(result$parameters, "pbkdf2_parameters"))
@@ -55,8 +55,8 @@ test_that("HMAC-SHA1: iterations", {
     expect_equal(result$parameters$iter, 1)
     expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
 
-    result <- PBKDF2("password", "salt", 20, prf="HMAC_SHA1", iterations=1)
-    expect_true(inherits(result, "pbkdf2_key"))
+    result <- rkdf_kdf_pbkdf2("password", "salt", 20, prf="HMAC_SHA1", iterations=1)
+    expect_true(inherits(result, "pbkdf2_result"))
     expect_true(inherits(result$masterkey, "raw"))
     expect_equal(result$masterkey, wkb::hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6"))
     expect_true(inherits(result$parameters, "pbkdf2_parameters"))
@@ -65,8 +65,8 @@ test_that("HMAC-SHA1: iterations", {
     expect_equal(result$parameters$iter, 1)
     expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
 
-    result <- PBKDF2("password", "salt", 20, prf="1.3.6.1.5.5.8.1.2", iterations=1)
-    expect_true(inherits(result, "pbkdf2_key"))
+    result <- rkdf_kdf_pbkdf2("password", "salt", 20, prf="1.3.6.1.5.5.8.1.2", iterations=1)
+    expect_true(inherits(result, "pbkdf2_result"))
     expect_true(inherits(result$masterkey, "raw"))
     expect_equal(result$masterkey, wkb::hex2raw("0c60c80f 961f0e71 f3a9b524 af601206  2fe037a6"))
     expect_true(inherits(result$parameters, "pbkdf2_parameters"))
@@ -75,8 +75,8 @@ test_that("HMAC-SHA1: iterations", {
     expect_equal(result$parameters$iter, 1)
     expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
 
-    result <- PBKDF2("password", "salt", 20, prf=HMAC_SHA1, iterations=2)
-    expect_true(inherits(result, "pbkdf2_key"))
+    result <- rkdf_kdf_pbkdf2("password", "salt", 20, prf=HMAC_SHA1, iterations=2)
+    expect_true(inherits(result, "pbkdf2_result"))
     expect_true(inherits(result$masterkey, "raw"))
     expect_equal(result$masterkey, wkb::hex2raw("ea6c014d c72d6f8c cd1ed92a ce1d41f0  d8de8957"))
     expect_true(inherits(result$parameters, "pbkdf2_parameters"))
@@ -85,8 +85,8 @@ test_that("HMAC-SHA1: iterations", {
     expect_equal(result$parameters$iter, 2)
     expect_equal(result$parameters$prf, "1.3.6.1.5.5.8.1.2")
 
-    result <- PBKDF2("password", "salt", 20, prf=HMAC_SHA1, iterations=4096)
-    expect_true(inherits(result, "pbkdf2_key"))
+    result <- rkdf_kdf_pbkdf2("password", "salt", 20, prf=HMAC_SHA1, iterations=4096)
+    expect_true(inherits(result, "pbkdf2_result"))
     expect_true(inherits(result$masterkey, "raw"))
     expect_equal(result$masterkey, wkb::hex2raw("4b007901 b765489a bead49d9 26f721d0  65a429c1"))
     expect_true(inherits(result$parameters, "pbkdf2_parameters"))
@@ -99,7 +99,7 @@ test_that("HMAC-SHA1: iterations", {
 # SHA-1 IETF RFC 6070 test vectors: longer password and salt, and with special characters; also dkLen != hlen
 test_that("HMAC-SHA1: pw salt dkLen", {
     expect_equal(
-        PBKDF2("passwordPASSWORDpassword", "saltSALTsaltSALTsaltSALTsaltSALTsalt", 25,
+        rkdf_kdf_pbkdf2("passwordPASSWORDpassword", "saltSALTsaltSALTsaltSALTsaltSALTsalt", 25,
                prf=HMAC_SHA1, iterations=4096)[[1]],
         wkb::hex2raw(paste(
             "3d2eec4f e41c849b 80c8d836 62c0e44a  8b291a96 4cf2f070 38"
@@ -108,60 +108,62 @@ test_that("HMAC-SHA1: pw salt dkLen", {
     pass0word  <- c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
     sa0lt  <- c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
     expect_equal(
-        PBKDF2(pass0word, sa0lt, 16, prf=HMAC_SHA1, iterations=4096)[[1]],
+        rkdf_kdf_pbkdf2(pass0word, sa0lt, 16, prf=HMAC_SHA1, iterations=4096)[[1]],
         wkb::hex2raw("56fa6aa7 5548099d cc37d7f0 3425e0c3")
     )
 })
 
 # SHA-1 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
-test_that("HMAC-SHA1: PBKDF2 can handle tests from pool", {
+test_that("HMAC-SHA1: rkdf_kdf_pbkdf2() can handle tests from pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA1_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA1)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA1)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.1.0xResultInHex))
-    expect_equal(result[[2]][[1]], charToRaw(test$Salt))
-    expect_equal(result[[2]][[2]], test$Outputbytes)
-    expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "1.3.6.1.5.5.8.1.2")
+    expect_equal(result[[2]], "pbkdf2")
+    expect_equal(result[[3]][[1]], charToRaw(test$Salt))
+    expect_equal(result[[3]][[2]], test$Outputbytes)
+    expect_equal(result[[3]][[3]], test$Iterations)
+    expect_equal(result[[3]][[4]], "1.3.6.1.5.5.8.1.2")
   }
 })
 
 
 # PBKDF2-HMAC-SHA2 ---------------------------------------------------------------------
 # sha224 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
-test_that("HMAC-SHA224: PBKDF2 can handle tests from pool", {
+test_that("HMAC-SHA224: rkdf_kdf_pbkdf2() can handle tests from pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA224_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA224)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA224)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.224.0xResultInHex))
-    expect_equal(result[[2]][[1]], charToRaw(test$Salt))
-    expect_equal(result[[2]][[2]], test$Outputbytes)
-    expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "1.2.840.113549.2.8")
+    expect_equal(result[[2]], "pbkdf2")
+    expect_equal(result[[3]][[1]], charToRaw(test$Salt))
+    expect_equal(result[[3]][[2]], test$Outputbytes)
+    expect_equal(result[[3]][[3]], test$Iterations)
+    expect_equal(result[[3]][[4]], "1.2.840.113549.2.8")
   }
 })
 
-test_that("HMAC-SHA256: PBKDF2 can handle adhoc tests and tests from pool", {
+test_that("HMAC-SHA256: rkdf_kdf_pbkdf2() can handle adhoc tests and tests from pool", {
 
   # Test various iteration counts, dkLen=hlen-HMAC-SHA-256=32
   expect_equal(
-    PBKDF2("password", "salt", 32, iterations=1)[[1]],
+    rkdf_kdf_pbkdf2("password", "salt", 32, iterations=1)[[1]],
     wkb::hex2raw("120fb6cf fcf8b32c 43e72252 56c4f837  a86548c9 2ccc3548 0805987c b70be17b")
   )
   expect_equal(
-    PBKDF2("password", "salt", 32, iterations=2)[[1]],
+    rkdf_kdf_pbkdf2("password", "salt", 32, iterations=2)[[1]],
     wkb::hex2raw("ae4d0c95 af6b46d3 2d0adff9 28f06dd0  2a303f8e f3c251df d6e2d85a 95474c43")
   )
   expect_equal(
-    PBKDF2("password", "salt", 32, iterations=4096)[[1]],
+    rkdf_kdf_pbkdf2("password", "salt", 32, iterations=4096)[[1]],
     wkb::hex2raw("c5e478d5 9288c841 aa530db6 845c4c8d  962893a0 01ce4e11 a4963873 aa98134a")
   )
 
   # Test varying length password and salt, and with special characters; also dkLen != hlen
   expect_equal(
-    PBKDF2("passwordPASSWORDpassword", "saltSALTsaltSALTsaltSALTsaltSALTsalt", 40, iterations=4096)[[1]],
+    rkdf_kdf_pbkdf2("passwordPASSWORDpassword", "saltSALTsaltSALTsaltSALTsaltSALTsalt", 40, iterations=4096)[[1]],
     wkb::hex2raw(paste(
       "348c89db cbd32b2f 32d814b8 116e84cf  2b17347e bc180018 1c4e2a1f b8dd53e1",
       "c635518c 7dac47e9"
@@ -170,11 +172,11 @@ test_that("HMAC-SHA256: PBKDF2 can handle adhoc tests and tests from pool", {
   pass0word  <- c(charToRaw("pass"), as.raw(0x00), charToRaw("word"))
   sa0lt  <- c(charToRaw("sa"), as.raw(0x00), charToRaw("lt"))
   expect_equal(
-    PBKDF2(pass0word, sa0lt, 16, iterations=4096)[[1]],
+    rkdf_kdf_pbkdf2(pass0word, sa0lt, 16, iterations=4096)[[1]],
     wkb::hex2raw("89b69d05 16f82989 3c696226 650a8687")
   )
   expect_equal(
-    PBKDF2("passwd", "salt", 128, iterations=1)[[1]],
+    rkdf_kdf_pbkdf2("passwd", "salt", 128, iterations=1)[[1]],
     wkb::hex2raw(paste(
       "55ac046e 56e3089f ec1691c2 2544b605  f9418521 6dde0465 e68b9d57 c20dacbc",
       "49ca9ccc f179b645 991664b3 9d77ef31  7c71b845 b1e30bd5 09112041 d3a19783",
@@ -183,7 +185,7 @@ test_that("HMAC-SHA256: PBKDF2 can handle adhoc tests and tests from pool", {
     ))
   )
   expect_equal(
-    PBKDF2("Password", "NaCl", 128, iterations=80000)[[1]],
+    rkdf_kdf_pbkdf2("Password", "NaCl", 128, iterations=80000)[[1]],
     wkb::hex2raw(paste(
       "4ddcd8f6 0b98be21 830cee5e f22701f9  641a4418 d04c0414 aeff0887 6b34ab56",
       "a1d425a1 22583354 9adb841b 51c9b317  6a272bde bba1d078 478f62b3 97f33c8d",
@@ -196,49 +198,52 @@ test_that("HMAC-SHA256: PBKDF2 can handle adhoc tests and tests from pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA256_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.256.0xResultInHex))
-    expect_equal(result[[2]][[1]], charToRaw(test$Salt))
-    expect_equal(result[[2]][[2]], test$Outputbytes)
-    expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "1.2.840.113549.2.9")
+    expect_equal(result[[2]], "pbkdf2")
+    expect_equal(result[[3]][[1]], charToRaw(test$Salt))
+    expect_equal(result[[3]][[2]], test$Outputbytes)
+    expect_equal(result[[3]][[3]], test$Iterations)
+    expect_equal(result[[3]][[4]], "1.2.840.113549.2.9")
   }
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA256)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA256)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.256.0xResultInHex))
   }
 })
 
 # SHA-384 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
-test_that("HMAC-SHA384: PBKDF2 can handle tests from pool", {
+test_that("HMAC-SHA384: rkdf_kdf_pbkdf2() can handle tests from pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA384_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA384)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA384)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.384.0xResultInHex))
-    expect_equal(result[[2]][[1]], charToRaw(test$Salt))
-    expect_equal(result[[2]][[2]], test$Outputbytes)
-    expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "1.2.840.113549.2.10")
+    expect_equal(result[[2]], "pbkdf2")
+    expect_equal(result[[3]][[1]], charToRaw(test$Salt))
+    expect_equal(result[[3]][[2]], test$Outputbytes)
+    expect_equal(result[[3]][[3]], test$Iterations)
+    expect_equal(result[[3]][[4]], "1.2.840.113549.2.10")
   }
 })
 
 # SHA-512 suite from GIT Anti-weakpasswords/PBKDF2-Test-Vectors, iterations <= 10000
-test_that("HMAC-SHA512: PBKDF2 can handle tests from small pool", {
+test_that("HMAC-SHA512: rkdf_kdf_pbkdf2() can handle tests from small pool", {
   df_tests <- read.csv("../doc/PBKDF2-HMAC-Various_Test_Vectors-SHA512_small.csv")
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA512)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA512)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.512.0xResultInHex))
-    expect_equal(result[[2]][[1]], charToRaw(test$Salt))
-    expect_equal(result[[2]][[2]], test$Outputbytes)
-    expect_equal(result[[2]][[3]], test$Iterations)
-    expect_equal(result[[2]][[4]], "1.2.840.113549.2.11")
+    expect_equal(result[[2]], "pbkdf2")
+    expect_equal(result[[3]][[1]], charToRaw(test$Salt))
+    expect_equal(result[[3]][[2]], test$Outputbytes)
+    expect_equal(result[[3]][[3]], test$Iterations)
+    expect_equal(result[[3]][[4]], "1.2.840.113549.2.11")
   }
 })
 
-test_that("HMAC-SHA*: PBKDF2 can handle tests from full pool", {
+test_that("HMAC-SHA*: rkdf_kdf_pbkdf2() can handle tests from full pool", {
 
   skip_on_cran()
   skip_on_ci()
@@ -248,7 +253,7 @@ test_that("HMAC-SHA*: PBKDF2 can handle tests from full pool", {
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
     if (test$Iterations > 100000) next # These will take too long to test
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA224)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA224)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.224.0xResultInHex))
   }
 
@@ -256,7 +261,7 @@ test_that("HMAC-SHA*: PBKDF2 can handle tests from full pool", {
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
     if (test$Iterations > 100000) next # These will take too long to test
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.256.0xResultInHex))
   }
 
@@ -264,7 +269,7 @@ test_that("HMAC-SHA*: PBKDF2 can handle tests from full pool", {
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
     if (test$Iterations > 100000) next # These will take too long to test
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA384)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA384)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.384.0xResultInHex))
   }
 
@@ -272,7 +277,7 @@ test_that("HMAC-SHA*: PBKDF2 can handle tests from full pool", {
   for (row in 1:nrow(df_tests)) {
     test <- df_tests[row,]
     if (test$Iterations > 100000) next # These will take too long to test
-    result <- PBKDF2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA512)
+    result <- rkdf_kdf_pbkdf2(test$Password, test$Salt, test$Outputbytes, test$Iterations, HMAC_SHA512)
     expect_equal(result[[1]], wkb::hex2raw(test$SHA.512.0xResultInHex))
   }
 })
