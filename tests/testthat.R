@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(pbkdf2)
+library(rkdf)
 
-test_check("pbkdf2")
+test_check("rkdf")
