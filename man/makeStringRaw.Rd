@@ -2,14 +2,13 @@
 % Please edit documentation in R/utils.R
 \name{makeStringRaw}
 \alias{makeStringRaw}
-\title{makeStringRaw}
+\title{makeStringRaw
+Convert a string to raw bytes.}
 \usage{
-makeStringRaw(obj)
-}
-\arguments{
-\item{obj}{the UTF-8 string to be converted}
+makeStringRaw(x)
 }
 \description{
-Convert a UTF-8 string to raw bytes.
+makeStringRaw
+Convert a string to raw bytes.
 }
 \keyword{internal}
