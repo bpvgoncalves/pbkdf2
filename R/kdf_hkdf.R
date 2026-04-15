@@ -1,4 +1,18 @@
 
+#' HKDF - Extract
+#'
+#' Internal invariant:
+#'   - `salt` and `ikm` are raw vectors
+#'   - `hash` is a function(key, data) -> raw
+#'   - Validation is guaranteed by the public wrapper
+#'
+#' @param salt raw vector
+#' @param ikm  raw vector
+#' @param hash hmac-hash function
+#'
+#' @returns raw vector
+#'
+#' @keywords internal
 hkdf_extract <- function(salt, ikm, hash) {
 
   # RFC 5869 §2.2
@@ -7,6 +21,21 @@ hkdf_extract <- function(salt, ikm, hash) {
 }
 
 
+#' HKDF - Expand
+#'
+#' Internal invariant:
+#'   - `prk`, `info` are raw vectors
+#'   - `len` is a positive integer <= 255*HashLen
+#'   - `hash` is a function(key, data) -> raw
+#'
+#' @param prk  raw vector
+#' @param info raw vector
+#' @param len  positive integer
+#' @param hash hmac-hash function
+#'
+#' @returns raw vector
+#'
+#' @keywords internal
 hkdf_expand <- function(prk, info, len, hash) {
 
   t <- raw(0)
@@ -31,6 +60,39 @@ hkdf_expand <- function(prk, info, len, hash) {
 
 
 
+#' HKDF - HMAC-based Extract-and-Expand Key Derivation Function (RFC-5869)
+#'
+#' Derive a key using the HMAC-based Extract-and-Expand Key Derivation Function (HKDF).
+#' This function performs `Extract` (HMAC(salt, IKM)) followed by `Expand` to produce
+#' `len` bytes of output key material (OKM).
+#'
+#' @param salt (character or raw) Optional salt value. If `NULL` or empty, a string of zeros
+#'   equal to the PRF's hash output length is used (per RFC 5869).
+#' @param ikm (character or raw) Input keying material. Must be provided.
+#' @param info (character or raw) Optional context/application-specific info string.
+#' @param len (integer) Length in bytes of output keying material. Must be positive and
+#'   not greater than `255 * HashLen`, where `HashLen` is the output length (in bytes) of the Hash.
+#' @param hash A PRF implementation (HMAC) to use. Accepts character name matching the algorithm
+#'   name or OID available in `algorithm_list`.
+#'
+#' @return A list with classes `hkdf_result` and `rkdf_result` containing:
+#'   * `key`: raw vector with `len` bytes OKM,
+#'   * `algorithm`: the string `"hkdf"`,
+#'   * `parameters`: an object of class `hkdf_parameters` with fields `salt`, `len`, `info` and
+#'        `hash`
+#'   * `timestamp`: UTC timestamp string.
+#'
+#' @details
+#' This implementation follows RFC 5869. Important notes:
+#' * If `salt` is omitted, it is replaced with `0x00` repeated `HashLen` times (per RFC).
+#' * The function enforces the RFC limit: `len <= 255 * HashLen`.
+#'
+#' @examples
+#' # using a named PRF (friendly name must be registered in algorithm_list)
+#' res <- rkdf_kdf_hkdf(NULL, "input-key", "context", 32, "hmac_sha256")
+#' cat(res$key)
+#'
+#' @export
 rkdf_kdf_hkdf <- function(salt, ikm, info, len, hash) {
 
   check_hmac_func(hash, "hash")
