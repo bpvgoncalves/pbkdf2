@@ -33,7 +33,7 @@ f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
     return(result)
 }
 
-#' PBKDF2
+#' PBKDF2 - Password-Based Key Derivation Function 2 (RFC-8018)
 #'
 #' Get the requested number of bytes from the expanded key.
 #'
