@@ -20,7 +20,7 @@
 #'
 f_PBKDF2 <- function(passphrase, salt, iterations, prf, index) {
     if (!is.numeric(index)) stop("The index must be a number.")
-    if (!(0 <= index && index <= ((2^32)-1)))
+    if (!(1 <= index && index <= ((2^32)-1)))
         stop ("Derived key too long.")
     U <- prf(passphrase, c(salt, uintToRaw(index)))
     result <- U
