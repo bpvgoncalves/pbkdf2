@@ -40,7 +40,7 @@ makeStringRaw <- function(x) {
 #' @keywords internal
 #'
 uintToRaw <- function(num, minLen=4) {
-  if(0 > num) stop(paste(num, "is not positive."))
+  if(0 > num) stop(paste(num, "must be positive."))
   if(0 != num %% 1) stop(paste(num, "is not an integer."))
   raw <- raw()
   rem <- num
@@ -75,10 +75,10 @@ name_to_oid <- function(name) {
   }
 
   if (length(matches) == 0L)
-    rkdf_stop(sprintf("Unknown friendly name: %s", name))
+    rkdf_stop(sprintf("Unknown name: %s", name))
 
   if (length(matches) > 1L)
-    rkdf_stop(sprintf("Ambiguous friendly name: %s", name))
+    rkdf_stop(sprintf("Ambiguous name: %s", name))
 
   as.character(algorithm_list$oid[matches])
 }
@@ -124,9 +124,9 @@ short_to_name <- function(short) {
 
   matches <- which(.normalized(algorithm_list$short_name) == .normalized(short))
   if (length(matches) == 0L)
-    rkdf_stop(sprintf("Unknown short name: ", short, call. = FALSE))
+    rkdf_stop(sprintf("Unknown short name: %s", short, call. = FALSE))
   if (length(matches) > 1L)
-    rkdf_stop(sprintf("Ambiguous short name: ", short, call. = FALSE))
+    rkdf_stop(sprintf("Ambiguous short name: %s", short, call. = FALSE))
 
   as.character(algorithm_list$frdly_name[matches])
 }
