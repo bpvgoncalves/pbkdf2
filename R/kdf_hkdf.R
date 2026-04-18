@@ -111,8 +111,10 @@ rkdf_kdf_hkdf <- function(salt, ikm, info, len, hash) {
   }
   hash_len <- oid_to_len(algo)
   if (hash_len <= 0L)
-    rkdf_stop("Unable to determine HashLen.",
-              "Underlying HMAC implementation returned zero-length output.")
+    # Defensive check: oid_to_len should never return 0 or negative, but we keep this
+    # as a sanity check in case the algorithm_list data is corrupted
+    rkdf_stop("Invalid hash length.",
+              "This should never occur - please report as a bug.")
 
   check_string_or_raw(salt, "salt", TRUE)
   salt <- makeStringRaw(salt)
@@ -134,7 +136,8 @@ rkdf_kdf_hkdf <- function(salt, ikm, info, len, hash) {
   prk <- hkdf_extract(salt, ikm, hash)
   if (length(prk) < hash_len) {
     # By construction this should never occur. We still check just in case.
-    rkdf_stop("The key obtained from extract is not long enough.")
+    rkdf_stop("The key obtained from extract is not long enough.",
+              "This should never occur - please report as a bug.")
   }
 
   okm <- hkdf_expand(prk, info, len, hash)
