@@ -89,9 +89,6 @@ rkdf_mnemonic_to_seed <- function(mnemonic, passphrase = "") {
   }
   check_string_or_raw(mnemonic, "mnemonic")
 
-  if (is.character(passphrase) && length(passphrase) > 1) {
-    passphrase <- paste(passphrase, collapse = " ")
-  }
   check_string_or_raw(passphrase, "passphrase")
 
   mnemonic <- bip39_normalize(mnemonic)

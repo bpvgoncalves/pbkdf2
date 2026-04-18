@@ -22,8 +22,20 @@ test_that("rkdf_mnemonic_to_seed() fails with invalid mnemonic", {
   expect_error(rkdf_mnemonic_to_seed(NULL), "mnemonic")
   expect_error(rkdf_mnemonic_to_seed(TRUE), "mnemonic")
   expect_error(rkdf_mnemonic_to_seed(123), "mnemonic")
-  expect_error(rkdf_mnemonic_to_seed(c("valid", "words"), passphrase = TRUE), "passphrase")
-  expect_error(rkdf_mnemonic_to_seed(c("valid", "words"), passphrase = 123), "passphrase")
+
+})
+
+test_that("rkdf_mnemonic_to_seed() fails with invalid passphrase", {
+
+  expect_error(rkdf_mnemonic_to_seed("valid words", TRUE), "passphrase")
+  expect_error(rkdf_mnemonic_to_seed("valid words", 123), "passphrase")
+  expect_error(rkdf_mnemonic_to_seed("valid words", c("multiple", "passphrases")), "passphrase")
+
+})
+
+test_that("rkdf_mnemonic_to_seed() fails with empty mnemonic", {
+
+  expect_error(rkdf_mnemonic_to_seed(""), "Mnemonic cannot be empty")
 
 })
 
