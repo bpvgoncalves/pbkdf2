@@ -9,7 +9,7 @@ Authors@R: c(
                        "Primary author and maintainer")),
     person("Sigfredo Ismael", "Nin Colón",
            role = c("aut", "cph"),
-           comment = "Original PBKDF2 implementation (MIT, 2022)"),
+           comment = "Original PBKDF2 implementation (MIT, 2022)"))
 Description: Implements the Password-Based Key Derivation Function 2 (PBKDF2)
     according to the PKCS #5 v2.1 standard. The core implementation is derived
     from the original work by Sigfredo Ismael Nin Colón (MIT License, 2022)
