@@ -1,8 +1,30 @@
+###########################################################################
+# BIP39 - Bitcoin Improvement Proposal 39: Mnemonic code for generating
+# deterministic keys
+###########################################################################
+
+#' Normalize UTF-8 and strip whitespace
+#'
+#' @param x character vector
 #' @keywords internal
 bip39_normalize <- function(x) {
   enc2utf8(x)
 }
 
+
+#' Entropy to Mnemonic Words
+#'
+#' Convert random bytes to a BIP39 mnemonic sentence.
+#'
+#' @param entropy raw vector of 16, 20, 24, 28, or 32 bytes (128, 160, 192, 224, 256 bits)
+#'
+#' @return character vector of words
+#'
+#' @examples
+#' entropy <- openssl::rand_bytes(16)
+#' rkdf_mnemonic_to_words(entropy)
+#'
+#' @export
 rkdf_mnemonic_to_words <- function(entropy) {
 
   if (!is.raw(entropy))
@@ -41,6 +63,24 @@ rkdf_mnemonic_to_words <- function(entropy) {
   words
 }
 
+
+#' Mnemonic to Seed
+#'
+#' Derive a 64-byte seed from a BIP39 mnemonic sentence using PBKDF2-HMAC-SHA512
+#' (2048 iterations). This is the first step of BIP32 key derivation.
+#'
+#' @param mnemonic character vector of words (or a single string with space-separated words)
+#' @param passphrase character string; extra salt (default: empty string, standard BIP39)
+#'
+#' @return raw vector of 64 bytes (the "seed")
+#'
+#' @examples
+#' entropy <- openssl::rand_bytes(16)
+#' words <- rkdf_mnemonic_to_words(entropy)
+#' seed <- rkdf_mnemonic_to_seed(words, "my passphrase")
+#' seed
+#'
+#' @export
 rkdf_mnemonic_to_seed <- function(mnemonic, passphrase = "") {
 
   # Normalize inputs — handle both character vector and single string
@@ -67,6 +107,22 @@ rkdf_mnemonic_to_seed <- function(mnemonic, passphrase = "") {
   rkdf_kdf_pbkdf2(mnemonic, charToRaw(salt), 64L, iterations = 2048L, prf = HMAC_SHA512)
 }
 
+
+#' Validate a BIP39 Mnemonic
+#'
+#' Verify that a mnemonic sentence has a valid checksum.
+#'
+#' @param mnemonic character vector of words (or a single string with space-separated words)
+#'
+#' @return logical; TRUE if the checksum is valid, FALSE otherwise
+#'
+#' @examples
+#' entropy <- openssl::rand_bytes(16)
+#' words <- rkdf_mnemonic_to_words(entropy)
+#' rkdf_mnemonic_validate(words)  # TRUE
+#' rkdf_mnemonic_validate(c(words[-1], "abandon"))  # FALSE
+#'
+#' @export
 rkdf_mnemonic_validate <- function(mnemonic) {
 
   # Normalize and split — handle both character vector and single string
